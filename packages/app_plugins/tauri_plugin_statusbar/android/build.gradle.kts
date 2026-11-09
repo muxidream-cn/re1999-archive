@@ -4,7 +4,8 @@ plugins {
 }
 
 android {
-    namespace = "com.muxidream.re1999archive"
+    // 必须与宿主 app 模块的 namespace 区分，否则 AGP 会报「used in multiple modules」并可能升级为构建失败
+    namespace = "com.muxidream.re1999archive.statusbar"
     compileSdk = 36
 
     defaultConfig {

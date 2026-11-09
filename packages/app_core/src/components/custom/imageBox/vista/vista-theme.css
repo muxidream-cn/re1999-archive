@@ -82,10 +82,19 @@
   padding-inline: 4px;
 }
 
+/*
+ * 序号必须单行
+ * 库写入的是「3 / 120」这类短文本，div 默认 white-space: normal，斜杠与空格都能断行。
+ * 一旦断成两行，.vvw-index 的高度翻倍，而顶栏是 align-items: stretch，
+ * 同排所有 .vvw-ui 会被一起拉到同样高度，按钮再靠 height: 100% 变成 40x58 的竖块。
+ * flex: 0 0 auto 保证窄屏时也不会被压缩到内容溢出（溢出同样会换行）。
+ */
 .vvw-top-bar .vvw-ui.vvw-index {
   padding: 8px 14px;
   font-size: 15px;
   color: #e8e8e8;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .vvw-ui > button {
@@ -548,20 +557,22 @@
 
 @media (max-width: 767px) {
   /*
-   * 顶栏更紧凑：收起后固定按钮（放大 / 重置 / 下载 / 沉浸 / more / 关闭）
-   * 还要能跟左侧索引并排放进 360px，桌面尺寸在这里会溢出
+   * 顶栏更紧凑：收起四个翻转后固定按钮是放大 / 重置 / 自动播放 / 下载 / 沉浸 / more / 关闭，共 7 个
+   * 360px 预算：7 × (24 + 6×2) + gap 2×6 + 序号约 66 + 顶栏 padding-inline 8 ≈ 338px，尚有余量
+   * 若沿用 8px padding 则是 7 × 40 + 12 + 66 + 8 ≈ 366px，超出 360 后序号会被压到换行，
+   * 再经顶栏的 align-items: stretch 把整排按钮拉成 40x58，所以这里必须收到 6px
    */
   .vvw-top-bar {
     gap: 2px;
   }
 
   .vvw-top-bar .vvw-ui.vvw-index {
-    padding: 8px 10px;
+    padding: 6px 8px;
     font-size: 14px;
   }
 
   .vvw-ui > button {
-    padding: 8px 8px;
+    padding: 6px 6px;
   }
 
   /* 移动端不显示缩略图带两侧的滚动按钮 */
