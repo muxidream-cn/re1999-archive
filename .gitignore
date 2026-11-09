@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+.husky
+node_modules
+dist
+dist-ssr
+dist_electron
+*.local
+
+# Editor directories and files
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+**/*.tsbuildinfo
+**/desktop.ini
+**/components.d.ts
+**/auto-imports.d.ts
+*.zip
+target
+packages/tauri-plugin-apk-installer
+# 其他备份的模板文件
+packages/app_core/src/components/template/*
+
+# 环境变量本地配置（仅保留 .template 模板文件）
+.env
+.env.*
+!.env.template
+!.env.*.template
+**/memo.md

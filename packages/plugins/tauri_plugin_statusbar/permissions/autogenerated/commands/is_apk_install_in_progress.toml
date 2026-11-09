@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-is-apk-install-in-progress"
+description = "Enables the is_apk_install_in_progress command without any pre-configured scope."
+commands.allow = ["is_apk_install_in_progress"]
+
+[[permission]]
+identifier = "deny-is-apk-install-in-progress"
+description = "Denies the is_apk_install_in_progress command without any pre-configured scope."
+commands.deny = ["is_apk_install_in_progress"]

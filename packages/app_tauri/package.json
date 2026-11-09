@@ -1,0 +1,10 @@
+{
+  "name": "app_tauri",
+  "version": "0.1.2",
+  "author": "默默 (MoMo) <1224021291@qq.com>",
+  "type": "module",
+  "scripts": {
+    "check": "cargo check --manifest-path Cargo.toml",
+    "tauri": "tauri"
+  }
+}

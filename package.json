@@ -1,0 +1,70 @@
+{
+  "name": "re1999-archive",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "默默 (MoMo) <1224021291@qq.com>",
+  "type": "module",
+  "scripts": {
+    "build:app": "pnpm -F app_tauri tauri android build --config tauri.android.conf.json --target aarch64",
+    "build:desktop": "pnpm -F app_tauri tauri build --config tauri.windows.conf.json",
+    "build:desktop:microsoft-store": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File packages/app_tauri/scripts/build-microsoft-store.ps1",
+    "build:web": "pnpm -F app_web build",
+    "check": "eslint .",
+    "check:prettier": "prettier --check .",
+    "commit": "pnpm exec lint-staged && cz",
+    "dev:app": "pnpm -F app_tauri tauri android dev --config tauri.android.conf.json",
+    "dev:desktop": "pnpm -F app_tauri tauri dev --config tauri.windows.conf.json",
+    "dev:docs": "pnpm -F re1999-docs docs:dev",
+    "dev:server": "pnpm -F app_server run start",
+    "dev:web": "pnpm -F app_web dev",
+    "lint": "eslint . --fix",
+    "lint:commitlint": "commitlint --edit $1",
+    "lint:prettier": "prettier . --write",
+    "lint-staged": "lint-staged",
+    "prepare": "husky",
+    "preview:web": "pnpm -F app_web preview",
+    "prod:server": "pnpm -F app_server run start:prod",
+    "updateVersion": "node scripts/updateVersion.js"
+  },
+  "lint-staged": {
+    "**/*.{cjs,mjs,js,jsx,tsx,ts,vue,less}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-git"
+    }
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "semver": "^7.8.5"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@eslint/js": "^9.39.4",
+    "@typescript-eslint/eslint-plugin": "^8.58.1",
+    "@typescript-eslint/parser": "^8.58.1",
+    "cz-git": "^1.12.0",
+    "dotenv": "^17.4.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsdoc": "^62.9.0",
+    "eslint-plugin-vue": "^10.8.0",
+    "globals": "^17.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.2",
+    "prettier-plugin-packagejson": "^3.0.2",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "typescript-eslint": "^8.58.1",
+    "vue-eslint-parser": "^10.4.0"
+  },
+  "engines": {
+    "node": "^24.22.1"
+  }
+}

@@ -1,0 +1,137 @@
+/* 文字描边动画 */
+@keyframes stroke {
+  0% {
+    fill: rgba(72, 138, 20, 0);
+    stroke: rgba(54, 95, 160, 1);
+    stroke-dashoffset: 25%;
+    stroke-dasharray: 0 50%;
+    stroke-width: 0.8;
+  }
+
+  50% {
+    fill: rgba(72, 138, 20, 0);
+    stroke: rgba(54, 95, 160, 1);
+    stroke-width: 1.2;
+  }
+
+  70% {
+    fill: rgba(72, 138, 20, 0);
+    stroke: rgba(54, 95, 160, 1);
+    stroke-width: 1.5;
+  }
+
+  90%,
+  100% {
+    fill: rgba(72, 138, 204, 1);
+    stroke: rgba(54, 95, 160, 0);
+    stroke-dashoffset: -25%;
+    stroke-dasharray: 50% 0;
+    stroke-width: 0;
+  }
+}
+
+/* 旋转 */
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 左右抖动 */
+@keyframes shake {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+}
+
+/* 闪烁 */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+}
+
+/* 浅色闪烁 */
+@keyframes blink_mask {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+/* 报警（左右抖动） */
+.shake {
+  animation: shake 0.125s linear infinite;
+  transform-origin: center;
+}
+
+/* 静音（闪烁） */
+.blink {
+  animation: blink 1.5s linear infinite;
+  transform-origin: center;
+}
+
+/* 报警(浅色遮罩闪烁) */
+.blink_mask {
+  position: relative;
+
+  &::after {
+    background-color: red;
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+    pointer-events: none;
+    animation: blink_mask 2s linear infinite;
+    transform-origin: center;
+  }
+}
+
+/* 边框线条旋转,用 clip-path: inset(top right bottom left) 表示四条窄条逐条显隐 */
+/* 通过裁切等比长宽的边框来使每个面的速度一致（所以长款不一致时动画也不匀速） */
+@keyframes clipMe {
+  0%,
+  100% {
+    /* 顶部 2px 可见（表现为上边跑动） */
+    clip-path: inset(0 0 calc(100% - 2px) 0);
+    -webkit-clip-path: inset(0 0 calc(100% - 2px) 0);
+  }
+  25% {
+    /* 右侧 2px 可见 */
+    clip-path: inset(0 calc(100% - 2px) 0 0);
+    -webkit-clip-path: inset(0 calc(100% - 2px) 0 0);
+  }
+  50% {
+    /* 底部 2px 可见 */
+    clip-path: inset(calc(100% - 2px) 0 0 0);
+    -webkit-clip-path: inset(calc(100% - 2px) 0 0 0);
+  }
+  75% {
+    /* 左侧 2px 可见 */
+    clip-path: inset(0 0 0 calc(100% - 2px));
+    -webkit-clip-path: inset(0 0 0 calc(100% - 2px));
+  }
+}

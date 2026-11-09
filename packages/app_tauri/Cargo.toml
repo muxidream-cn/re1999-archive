@@ -1,0 +1,46 @@
+[package]
+name = "re1999-archive"
+version = "0.1.0"
+description = "A Tauri App"
+authors = ["you"]
+license = "MIT"
+repository = ""
+edition = "2021"
+rust-version = "1.77.2"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.6.3", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+# 不开启 devtools feature：Tauri 2 在 debug 构建默认启用 devtools，
+# release 构建不带该 feature 才能真正把调试面板从产物中移除
+tauri = { version = "2.11.3", features = [] }
+tauri-plugin-log = "2"
+tauri-plugin-http = "2"
+tauri-plugin-pinia = "4"
+tauri-plugin-os = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-fs = "2.5.2"
+tauri-plugin-persisted-scope = "=2.3.8"
+tauri-plugin-dialog = "2"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "stream"] }
+tokio = { version = "1", features = ["time"] }
+tauri-plugin-status-bar = { path = "../plugins/tauri_plugin_statusbar" }
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-updater = "2"
+tauri-plugin-window-state = "2"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+# 版本必须与 tauri 依赖树中的 webview2-com 保持一致，
+# 否则 with_webview 拿到的 COM 接口类型不匹配（编译期 mismatched types）
+webview2-com = "0.38"

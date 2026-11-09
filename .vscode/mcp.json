@@ -1,0 +1,8 @@
+{
+    "servers": {
+        "vistaview": {
+            "type": "http",
+            "url": "https://vistaview.jujiplay.com/mcp"
+        }
+    }
+}

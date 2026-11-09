@@ -1,0 +1,7 @@
+{
+  "build": {
+    "frontendDist": "../app_windows/dist",
+    "beforeDevCommand": "pnpm -F app_windows dev",
+    "beforeBuildCommand": "pnpm -F app_windows build"
+  }
+}

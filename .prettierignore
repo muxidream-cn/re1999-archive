@@ -1,0 +1,32 @@
+.local
+**/node_modules/**
+
+
+# 项目公用的文件
+/public/*
+# 图标
+**/*.svg
+# 脚本
+**/*.sh
+
+# 自动生成
+**/auto-imports.d.ts
+**/components.d.ts
+**/vite-env.d.ts
+**/*.tsbuildinfo
+**/components/ui/**
+
+# pnpm
+**/pnpm-lock.yaml
+
+# tauri / rust 构建
+**/src-tauri/target/**
+
+# 构建产物
+**/dist/**
+**/dist-ssr/**
+**/dev-dist/**
+**/dist_electron/**
+
+# 忽略tauri的示例项目
+ "**/examples/**"

@@ -1,0 +1,61 @@
+{
+  "cSpell.words": [
+    "bluepoch",
+    "fsize",
+    "hexagoncircle",
+    "httpc",
+    "ifdef",
+    "ifndef",
+    "Kudry",
+    "lhlyu",
+    "lightgallery",
+    "lucide",
+    "Noto",
+    "oklch",
+    "reka",
+    "rsplit",
+    "shadcn",
+    "sonner",
+    "XERJ",
+    "yoyo",
+    "Zheng",
+    "zhizhu",
+    "zhuangshi",
+    "zhusi",
+    "zhutui",
+    "zhuwang"
+  ],
+  "editor.fontSize": 18,
+  "editor.formatOnSave": true,
+  "eslint.run": "onSave",
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue"
+  ],
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[less]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

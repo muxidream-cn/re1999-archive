@@ -1,0 +1,32 @@
+{
+  "identifier": "android-capability",
+  "description": "Android APK update permissions",
+  "platforms": ["android"],
+  "windows": ["main"],
+  "permissions": [
+    "status-bar:allow-set-statusbar-light",
+    "status-bar:allow-get-apk-md5",
+    "status-bar:allow-open-apk",
+    "status-bar:allow-is-apk-install-in-progress",
+    {
+      "identifier": "fs:allow-mkdir",
+      "allow": [{ "path": "$APPLOCALDATA/files/apk-updates" }]
+    },
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [{ "path": "$APPLOCALDATA/files/apk-updates/*" }]
+    },
+    {
+      "identifier": "fs:allow-write-file",
+      "allow": [{ "path": "$APPLOCALDATA/files/apk-updates/*" }]
+    },
+    {
+      "identifier": "fs:allow-remove",
+      "allow": [{ "path": "$APPLOCALDATA/files/apk-updates/*" }]
+    },
+    {
+      "identifier": "fs:allow-rename",
+      "allow": [{ "path": "$APPLOCALDATA/files/apk-updates/*" }]
+    }
+  ]
+}

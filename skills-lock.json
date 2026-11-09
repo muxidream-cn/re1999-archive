@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "shadcn-vue": {
+      "source": "../../../../../temp/shadcn-vue/skills/shadcn-vue",
+      "sourceType": "local",
+      "computedHash": "8f889bee4622048473cab8272b5bbcdf3e0e83929afb1b444adf572fa9c252a3"
+    }
+  }
+}

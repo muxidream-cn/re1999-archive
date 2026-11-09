@@ -1,0 +1,38 @@
+allowBuilds:
+  '@alicloud/openapi-core': true
+  "@parcel/watcher": true
+  "@tailwindcss/oxide": true
+  cn-font-split: true
+  core-js: true
+  cpu-features: true
+  electron: true
+  electron-winstaller: true
+  esbuild: true
+  koffi: true
+  less: true
+  protobufjs: true
+  ssh2: true
+  unrs-resolver: true
+  vue-demi: true
+  yorkie: true
+
+# !xxx/**  表示排除目录xxx及其子文件，不收入monorepo
+# 并且其它项目需要创建pnpm-workspace.yaml，并输入packages: [],才可以作为单独项目运行，否则执行依赖安装会安装到父目录
+
+packages:
+  # packages/ 直接子目录中的所有包 - 所有前端项目存储的目录
+  - 'packages/*'
+  # packages/plugins/ 中的所有插件包
+  - 'packages/plugins/*'
+  # components/ 子目录中的所有包 - 给所有项目使用的公共组件
+  - 'components/**'
+  # utils/ 子目录中的所有包 - 给所有项目使用的公共工具库
+  - 'utils/**'
+  # types/ 子目录中的所有包 - 给所有项目使用的公共类型库
+  - 'types/**'
+  # schema/ - 服务器接口 zod schema，被 app_core 通过 @serverSchema 别名引用
+  - 'schema'
+
+permissions:
+  dotenv:
+    skills: true

@@ -1,0 +1,636 @@
+/*
+ * VistaView 主题覆写
+ * 目标：对齐下载器原有观感（纯黑底、无边框工具栏、图片下方居中说明文字、底部横向缩略图带）
+ * 只通过 CSS 变量与类名覆写，不改库源文件
+ */
+
+/*
+ * 画廊层级：跟随 useVistaGallery 传入的 initialZIndex（库内联写到 --vvw-init-z）
+ * 库内层级默认是 int 上限，会盖住 vue-sonner 的提示（999999999）以及 GlobalAlert / Loading（9999），
+ */
+.vvw-root {
+  --vvw-dest-z: 1000;
+}
+
+:root {
+  --vvw-bg-color: #000;
+  /* 旧实现是纯黑不透明背景，这里去掉毛玻璃 */
+  --vvw-bg-opacity: 1;
+  --vvw-bg-blur: 0px;
+  --vvw-ui-bg-color: transparent;
+  --vvw-ui-text-color: #f2f2f2;
+  --vvw-ui-outline-color: transparent;
+  --vvw-ui-border-width: 0px;
+  --vvw-ui-border-radius: 0px;
+  --vvw-ui-hover-bg-color: rgb(255 255 255 / 0.12);
+  --vvw-ui-active-bg-color: rgb(255 255 255 / 0.2);
+}
+
+/*
+ * 灯箱容器禁止程序化滚动
+ * 库把 .vvw-image-container 撑到 (preloads * 2 + 1) * 100vw，父级 .vvw-container 虽为 overflow:hidden，
+ * 但 hidden 只禁止用户滚动，scrollLeft 仍可被 scrollIntoView 之类的 API 改写，
+ * 一旦被改写，黑底 / 图片 / 上下工具栏会作为它的子元素一起被推出视口。
+ * overflow: clip 不产生滚动容器，从机制上禁掉；上一行给不支持 clip 的旧内核兜底。
+ */
+.vvw-container,
+.vvw-root {
+  overflow: hidden;
+  overflow: clip;
+}
+
+/*
+ * 大图只显示在「顶部工具栏」与「底部说明 + 缩略图区」之间，避免遮挡这两块信息。
+ * 高度由 JS 实测后写入 --vvg-safe-top / --vvg-safe-bottom，
+ * 配合 VistaImageHost.getFullSizeDim() 按该区域计算图片尺寸，上下留白不会压住内容。
+ *
+ * 注意：库给 .vvw-image-container 的是 position: relative + height: 100%（父级 .vvw-container 也是 100%），
+ * 所以不能用 top + bottom 或 inset 来定高——relative 下 bottom 会被忽略，
+ * height: auto 又会因为子项 .vvw-item 是 height: 100% 而形成循环依赖、塌成 0，
+ * 结果就是整张图被自身 overflow: hidden 裁掉。高度必须显式算出。
+ */
+.vvw-image-container {
+  height: max(0px, calc(100% - var(--vvg-safe-top, 0px) - var(--vvg-safe-bottom, 0px)));
+  /* relative 下的 top 是相对偏移：把容器下推到工具栏下方，且不影响兄弟元素布局 */
+  top: var(--vvg-safe-top, 0px);
+}
+
+/*
+ * 容器高度 / 偏移的缓动只在沉浸切换期间开启
+ *
+ * 全屏进出、窗口尺寸变化时不能有过渡：图片本身是瞬时贴合新盒子的（见 imageHost.refit 的 animate:false），
+ * 容器若还在 240ms 里滑过去，两者节奏错开，图片会被 overflow 短暂裁掉一截。
+ * 沉浸切换是用户主动操作，保留缓动，由 immersive 扩展在切换前后短暂打上这个标记。
+ */
+.vvw-root[data-vvg-fit-transition] .vvw-image-container {
+  transition:
+    height 240ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    top 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/*
+ * 顶部工具栏：图标紧凑贴边，并让出安卓状态栏
+ *
+ * 库把 .vvw-root 直接挂到 body 上，落在 #app 之外，所以 app.css 里
+ * #app { margin-top: var(--status-bar-height) } 这套适配对画廊无效，工具栏会压在状态栏下面。
+ * 这里把同一变量加在顶栏的上内边距上：imageHost 的 measureSafeArea() 用顶栏 offsetHeight
+ * 推算 --vvg-safe-top，图片区的 top 与高度都跟着它走，因此不需要改任何 JS。
+ * 兜底 0px：非安卓环境 / app.css 未加载时不会把布局撑坏。
+ */
+.vvw-top-bar {
+  padding-top: var(--status-bar-height, 0px);
+  padding-inline: 4px;
+}
+
+.vvw-top-bar .vvw-ui.vvw-index {
+  padding: 8px 14px;
+  font-size: 15px;
+  color: #e8e8e8;
+}
+
+.vvw-ui > button {
+  padding: 8px 10px;
+  touch-action: manipulation;
+}
+
+/*
+ * 图片解码完成即刻显示
+ * 库默认要等根节点拿到 .vvw--settled 才显示大图，而 settled 靠 root 上第一次 transitionend 触发，
+ * 原本要等 z-index 的那段延迟过渡。这里提前放开显示条件，
+ * settled 的时机改由下面 150ms 的整层淡入决定，不再受层级过渡影响
+ */
+.vvw-root .vvw-container .vvw-img-hi.vvw--loaded {
+  opacity: 1;
+}
+
+.vvw-img-hi {
+  transition: opacity 200ms ease;
+}
+
+/* ---------- 原图加载提示 ---------- */
+
+/*
+ * 序号下方的小转圈，原图解码完成即隐藏（显隐与定位由 extensions/imageLoading.ts 控制）
+ *
+ * 为什么是顶栏的绝对定位子元素，而不是序号块里的子元素：
+ * 库的 displayCurrentInfo() 每切一张都会直接改写 .vvw-index 的 textContent，
+ * 挂里面的节点会被整块抹掉。位置改成 inline style 写入，这里只负责静态外观。
+ * 用 translate 做居中、transform 做旋转：两个属性互不覆盖，动画不会把居中冲掉。
+ */
+.vvw-top-bar > .vvg-image-loading {
+  position: absolute;
+  z-index: 1;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgb(255 255 255 / 0.28);
+  /* 只给上边着色，转起来就是一截高亮弧 */
+  border-top-color: #f2f2f2;
+  border-radius: 50%;
+  translate: -50% 0;
+  pointer-events: none;
+  animation: vvg-image-loading-spin 700ms linear infinite;
+}
+
+/* hidden 属性优先级最高：本规则声明了 position 等属性，不会覆盖 UA 的 display: none */
+.vvw-top-bar > .vvg-image-loading[hidden] {
+  display: none;
+}
+
+@keyframes vvg-image-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* 加载状态必须可感知，只放慢旋转，不停掉 */
+  .vvw-top-bar > .vvg-image-loading {
+    animation-duration: 2s;
+  }
+}
+
+/*
+ * 打开占位层：主图解码前先用缩略图顶住画面（挂载点见 imageHost 的 createPlaceholder）
+ *
+ * 定位必须自己写：库的 `.vvw-item img` 只作用于 img，而占位层的外层是 div。
+ * 层级压在主图（z-index: 1）之下，主图淡入时自然覆盖；摘除时机由 JS 控制（淡入结束后 60ms 余量）。
+ *
+ * 关闭态没有额外规则：主图未就位时占位层正是唯一可见的内容，
+ * 跟着整层一起淡出比先被隐藏、画面变黑再淡出更连贯；主图已就位时占位层早已摘除。
+ */
+.vvw-item .vvg-img-lo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 0;
+  overflow: hidden;
+  /* Tailwind 的 preflight 会把 img 限制在父级宽度内，占位层尺寸由 JS 精确给定，必须放开 */
+  max-width: none;
+  max-height: none;
+  pointer-events: none;
+}
+
+.vvw-item .vvg-img-lo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  /* 与底部缩略图带一致：关掉原生拖拽，否则在图上按住移动会被 HTML5 drag 抢走指针事件 */
+  -webkit-user-drag: none;
+}
+
+/* ---------- 打开过渡：黑底与内容一起淡入 ---------- */
+
+/*
+ * 库的打开时序是为「从页面缩略图原位放大」设计的：z-index 先延迟一个动画时长(333ms)才提升，
+ * 黑底再延迟一个动画时长淡入，工具栏延迟两个动画时长淡入。
+ * 本画廊用数组模式初始化，没有原位元素，这三段延迟只剩副作用：
+ * 先被应用侧边栏压住，再出现「图片浮在页面上却没有背景」的中间态，工具栏最后才到。
+ *
+ * 这里把淡入交给 root 整层的 opacity（150ms），黑底直接置为不透明，
+ * 点击后第一帧就有黑底，黑底 / 图片 / 工具栏同进同出。
+ *
+ * 三条规则都必须带 :not(.vvw--closing)：关闭时 root 同时保留 .vvw--active 与 .vvw--closing，
+ * 不加就会用我们的 transition 冲掉库关闭态的整条 transition 列表（含 transform 与 z-index 延迟），
+ * 把关闭动画改坏。加上后特异性升到 0,3,0，且关闭时不匹配，关闭完全沿用库原有节奏。
+ */
+.vvw-root.vvw--active:not(.vvw--closing) {
+  transition: opacity 150ms ease;
+}
+
+.vvw-root:not(.vvw--closing) .vvw-bg {
+  opacity: 1;
+  transition: none;
+}
+
+.vvw-root:not(.vvw--closing) .vvw-ui {
+  transition: opacity 150ms ease;
+}
+
+/* ---------- 上下栏滑动显隐 ---------- */
+
+/*
+ * 顶部工具栏与底部说明/缩略图条改用滑动进出：
+ * - 打开：分别自画面上方、下方滑入，与 150ms 整层淡入并行
+ * - 关闭：反向滑出
+ * - 图片放大：只有底部信息区让出画面，顶部工具栏保持原位，
+ *   关闭 / 缩放 / 下载这些按钮放大后仍需可点（状态由 imageHost 写的 data-vvg-zoomed 提供）
+ * - 沉浸：上下两块一起滑出，同时左右翻页箭头向两侧滑出（状态为 data-vvg-immersive）
+ *
+ * 用独立的 translate 属性而不是 transform：库用 transform 拖动 .vvw-image-container，互不干扰；
+ * translate 也不参与布局，measureSafeArea() 读到的 offsetHeight 仍是真实高度，
+ * 上下安全区与图片尺寸计算不受影响。
+ *
+ * 基态放在屏幕外，只有「已激活、非关闭、非沉浸、且（底部栏）未放大」才归位，
+ * 所有需要隐藏的场景共用同一条回落路径，不会漏掉某个状态。
+ */
+.vvw-top-bar,
+.vvw-bottom-bar {
+  transition: translate 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.vvw-top-bar {
+  translate: 0 -100%;
+}
+
+.vvw-bottom-bar {
+  translate: 0 100%;
+}
+
+/* 顶部工具栏：打开即归位，放大时保持不动，沉浸时滑出 */
+.vvw-root.vvw--active:not(.vvw--closing):not([data-vvg-immersive]) .vvw-top-bar {
+  translate: 0 0;
+}
+
+/* 底部信息区：放大时让位，回到适配尺寸后再滑回；沉浸时同样滑出 */
+.vvw-root.vvw--active:not(.vvw--closing):not([data-vvg-immersive]):not([data-vvg-zoomed]) .vvw-bottom-bar {
+  translate: 0 0;
+}
+
+/*
+ * 左右翻页箭头：沉浸时分别向画面外滑出
+ * 这里用 transform 而不是 translate——库已经用 translate: 0 -50% 给箭头做垂直居中，覆盖会把居中弄丢
+ * transition 必须整条重写：上面的 .vvw-ui 规则是 opacity-only，特异性同为 0,3,0，
+ * 不重写就会连箭头的位移过渡一起冲掉
+ */
+.vvw-root:not(.vvw--closing) .vvw-prev,
+.vvw-root:not(.vvw--closing) .vvw-next {
+  transition:
+    opacity 150ms ease,
+    transform 240ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.vvw-root[data-vvg-immersive] .vvw-prev {
+  transform: translateX(-100%);
+}
+
+.vvw-root[data-vvg-immersive] .vvw-next {
+  transform: translateX(100%);
+}
+
+/*
+ * 沉浸模式的还原按钮
+ * 不在工具栏里（沉浸时工具栏已滑出，放里面点不到），绝对定位挂在根节点上，
+ * 不参与布局、不占安全区，全屏大图不会被它挤小
+ */
+.vvg-restore {
+  position: absolute;
+  /* 与顶栏用同一个变量：安卓 WebView 下 env(safe-area-inset-top) 常为 0，靠它才能躲开状态栏 */
+  top: max(12px, var(--status-bar-height, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #f2f2f2;
+  cursor: pointer;
+  background-color: rgb(255 255 255 / 0.14);
+  border: 0;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 200ms ease,
+    background-color 200ms ease;
+}
+
+.vvw-root[data-vvg-immersive] .vvg-restore {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.vvg-restore:hover {
+  background-color: rgb(255 255 255 / 0.24);
+}
+
+.vvg-restore:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.vvg-restore svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* 系统开启「减少动态效果」时直接切换，不播放滑动 */
+@media (prefers-reduced-motion: reduce) {
+  .vvw-top-bar,
+  .vvw-bottom-bar,
+  .vvw-root:not(.vvw--closing) .vvw-prev,
+  .vvw-root:not(.vvw--closing) .vvw-next,
+  .vvw-image-container,
+  /* 沉浸标记下那条规则特异性更高，必须同样列出才能被覆盖掉 */
+  .vvw-root[data-vvg-fit-transition] .vvw-image-container,
+  .vvg-restore {
+    transition: none;
+  }
+}
+
+/* ---------- 底部面板：说明文字 + 缩略图带 ---------- */
+
+/*
+ * 底部栏接管
+ * 库固定生成三个槽位（left / center / right），默认 space-between + gap:1rem + width:100vw，
+ * 空槽位依然参与布局，导致中间内容被挤压偏移、宽度二次约束。
+ * 这里让空槽位彻底退出布局，中间槽位占满并水平居中，整体贴底并留出安全区。
+ */
+.vvw-bottom-bar {
+  inset-inline: 0;
+  width: auto;
+  gap: 0;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 0 0 max(10px, env(safe-area-inset-bottom, 0px));
+}
+
+.vvw-bottom-bar > div:empty {
+  display: none;
+}
+
+/*
+ * 库内置的说明控件（bottomLeft 的 description）与自研的 .vvg-caption 内容重复，
+ * 说明文字统一由 .vvg-bottom 负责，这里兜底隐藏，避免库默认值变化后又冒出第二处文本
+ */
+.vvw-bottom-bar .vvw-desc {
+  display: none;
+}
+
+.vvw-bottom-bar > div:nth-child(2) {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+  align-items: flex-end;
+  min-width: 0;
+}
+
+/* 库给该槽位下的控件加了圆角与 overflow:hidden（特异性 0,3,1），必须带槽位前缀才能覆盖 */
+.vvw-bottom-bar > div:nth-child(2) > .vvw-ext[data-vvw-control="bottomPanel"] {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+  border-radius: 0;
+}
+
+/* 文本信息在上、缩略图带在下，整体水平居中贴底 */
+.vvg-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+  /* max-width: 760px; */
+  min-width: 0;
+  margin: 0 auto;
+  padding: 0 12px;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.vvg-caption {
+  width: 100%;
+  max-width: 100%;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #f0f0f0;
+  text-align: center;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.9);
+  overflow-wrap: anywhere;
+}
+
+/* 缩略图带整行：左右各一个滚动按钮，缩略图带居中 */
+.vvg-thumbs-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+/*
+ * 缩略图带：数量少时按内容宽度居中，数量多时被 max-width 截断成横向滚动容器，
+ * 且滚动起点固定在第一张（用 justify-content:center 会在溢出时把首项顶出可视区）
+ */
+.vvg-thumbs {
+  display: flex;
+  flex: 0 1 auto;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-start;
+  width: max-content;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  /* 桌面端可按住拖动横向滚动；纵向手势交给外层，避免拖动缩略图带时带动页面 */
+  cursor: grab;
+  touch-action: pan-x;
+  /* 缩略图在首次渲染前为空，这里先占住高度，
+     否则打开时测得的大图可用高度会偏大，图片会压住底部信息区 */
+  min-height: 80px;
+}
+
+.vvg-thumbs::-webkit-scrollbar {
+  display: none;
+}
+
+/* 拖动中：换手型光标，并停掉缩略图的过渡，避免拖动时高亮与透明度跟着闪 */
+.vvg-thumbs.is-dragging {
+  cursor: grabbing;
+}
+
+.vvg-thumbs.is-dragging .vvg-thumb {
+  transition: none;
+}
+
+/*
+ * 缩略图：高度固定，宽度由图片自身比例撑开，横图不会被裁掉两侧。
+ * 未加载完成时 img 没有内在尺寸、宽度为 0，min-width 用来占位，避免缩略图塌成一条线；
+ * 加载完成后宽度自动跳到等比结果，居中位置由脚本补一次校正。
+ */
+.vvg-thumb {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 16px;
+  height: 76px;
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #141414;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  /*
+   * 缩略图带是全量渲染（1k+ 张时每个缩略图都是一个 flex 项），
+   * 单张图片加载完成会改变它自己的宽度，进而让整条带重新布局。
+   * 这里把每张缩略图做成独立的布局 / 绘制容器，把失效范围限制在它自己身上
+   */
+  contain: layout paint;
+  opacity: 0.6;
+  transition:
+    opacity 200ms ease,
+    border-color 200ms ease;
+  touch-action: pan-x;
+}
+
+.vvg-thumb img {
+  display: block;
+  /* 只锁高度，宽度按 intrinsic ratio 自动算；配合 contain 保证任何比例都不裁剪 */
+  width: auto;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  /* 关掉图片的原生拖拽，否则在图片上按住移动会被 HTML5 drag 抢走指针事件 */
+  -webkit-user-drag: none;
+}
+
+/* 只滚动缩略图带，不切换图片 */
+.vvg-scroll {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: #f2f2f2;
+  cursor: pointer;
+  background-color: rgb(255 255 255 / 0.12);
+  border: 0;
+  border-radius: 999px;
+  transition:
+    opacity 200ms ease,
+    background-color 200ms ease;
+  touch-action: manipulation;
+}
+
+.vvg-scroll svg {
+  width: 18px;
+  height: 18px;
+}
+
+.vvg-scroll:hover:not(:disabled) {
+  background-color: rgb(255 255 255 / 0.22);
+}
+
+.vvg-scroll:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.vvg-thumb.is-active {
+  border-color: #fff;
+  opacity: 1;
+}
+
+.vvg-thumb:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 1px;
+}
+
+/* ---------- 移动端尺寸（Tailwind md 及以下，与 useDevice 的 smaller("md") 同界） ---------- */
+
+@media (max-width: 767px) {
+  /*
+   * 顶栏更紧凑：收起后固定按钮（放大 / 重置 / 下载 / 沉浸 / more / 关闭）
+   * 还要能跟左侧索引并排放进 360px，桌面尺寸在这里会溢出
+   */
+  .vvw-top-bar {
+    gap: 2px;
+  }
+
+  .vvw-top-bar .vvw-ui.vvw-index {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .vvw-ui > button {
+    padding: 8px 8px;
+  }
+
+  /* 移动端不显示缩略图带两侧的滚动按钮 */
+  .vvg-scroll {
+    display: none;
+  }
+
+  /* 缩略图按截图放大并改用红色高亮；宽度仍交给图片比例 */
+  .vvg-thumbs {
+    min-height: 92px;
+  }
+
+  .vvg-thumb {
+    min-width: 16px;
+    height: 88px;
+  }
+
+  .vvg-thumb.is-active {
+    border-color: #e23a3a;
+  }
+}
+
+/* ---------- 顶部工具栏溢出菜单（more） ---------- */
+
+/*
+ * 窄屏下由 overflowMenu 扩展把「四个翻转 + 全屏 + 自动播放」搬进这个浮层。
+ * 浮层挂在 .vvw-top-bar 内部：借它的 position: absolute 当定位基准，
+ * 同时跟着顶栏的 translate 一起进出，不需要另写开合动画。
+ * 选择器要带上 .vvw-top-bar 前缀：库有一条「:is(.vvw-top-bar,.vvw-bottom-bar) > div」的
+ * 通用规则会给直系 div 强制 display: flex，特异性相同，不提高优先级就会被覆盖。
+ */
+.vvw-top-bar > .vvg-more-menu {
+  position: absolute;
+  top: 100%;
+  right: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 136px;
+  max-height: calc(100dvh - 72px);
+  padding: 4px 0;
+  overflow-y: auto;
+  pointer-events: auto;
+  background-color: rgb(0 0 0 / 0.88);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.5);
+}
+
+.vvw-top-bar > .vvg-more-menu[hidden] {
+  display: none;
+}
+
+/* 菜单项铺满整行，图标与文字左对齐；图标沿用 .vvw-ui > button 的基础尺寸 */
+.vvg-more-menu .vvw-ui > button {
+  width: 100%;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 9px 14px 9px 12px;
+}
+
+/*
+ * 菜单项文字直接取 aria-label
+ * 全屏、自动播放的文案会随状态变化（全屏 / 退出全屏、自动播放 / 暂停自动播放），
+ * 由各自扩展的 sync() 更新 aria-label，这里用 attr() 实时跟随，不另存一份文案副本
+ */
+.vvg-more-menu .vvw-ui > button::after {
+  content: attr(aria-label);
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+}

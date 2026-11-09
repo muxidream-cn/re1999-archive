@@ -1,0 +1,7 @@
+{
+  "build": {
+    "frontendDist": "../app_android/dist",
+    "beforeDevCommand": "pnpm -F app_android dev",
+    "beforeBuildCommand": "pnpm -F app_android build"
+  }
+}

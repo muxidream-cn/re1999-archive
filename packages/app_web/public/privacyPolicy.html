@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隐私政策 - 默默的小站：游戏壁纸</title>
+    <style>
+        :root {
+            color-scheme: light dark;
+            --text-color: #333;
+            --bg-color: #fff;
+            --link-color: #0066cc;
+            --border-color: #eee;
+            --btn-bg: #f0f0f0;
+            --btn-text: #333;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-color: #e0e0e0;
+                --bg-color: #1e1e1e;
+                --link-color: #4da6ff;
+                --border-color: #333;
+                --btn-bg: #333;
+                --btn-text: #e0e0e0;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            transition: opacity 0.3s ease;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.4em;
+            margin-top: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .meta-info {
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .note {
+            background-color: rgba(128, 128, 128, 0.1);
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+
+        /* 语言切换按钮样式 */
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .lang-switch:hover {
+            opacity: 0.8;
+            transform: translateY(-1px);
+        }
+
+        /* 默认隐藏英文内容 */
+        .en {
+            display: none;
+        }
+
+        /* 当 body 带有 lang-en 时，隐藏中文，显示英文 */
+        body.lang-en .zh {
+            display: none;
+        }
+
+        body.lang-en .en {
+            display: block;
+        }
+
+        /* 处理行内元素的显示 */
+        body.lang-en span.en {
+            display: inline;
+        }
+
+        span.zh {
+            display: inline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="lang-switch" onclick="toggleLanguage()">
+        <span class="zh">Switch to English</span>
+        <span class="en">切换至中文</span>
+    </button>
+
+    <!-- 中文内容 -->
+    <div class="zh">
+        <h1>默默的小站：游戏壁纸 - 隐私政策</h1>
+        <div class="meta-info">
+            <p><strong>生效日期：</strong> 2026年10月31日</p>
+            <p><strong>开发者：</strong> 默默 (MoMo)</p>
+            <p><strong>联系邮箱：</strong> <a href="mailto:1224021291@qq.com">1224021291@qq.com</a></p>
+        </div>
+
+        <h2>1. 引言</h2>
+        <p>本隐私政策旨在说明“默默的小站：游戏壁纸”（以下简称“本应用”）如何处理您的信息。本应用涵盖 Windows 桌面端、Android 端及 Web
+            网页端。我们非常重视您的隐私，本应用的设计原则是<strong>尽可能少地接触和处理数据</strong>。</p>
+
+        <h2>2. 我们收集和使用的信息</h2>
+        <p><strong>本应用不收集、不存储、也不向任何第三方传输您的个人身份信息或设备信息。</strong></p>
+        <p>具体说明如下：</p>
+        <ul>
+            <li><strong>无账户系统：</strong>本应用目前不需要您注册或登录任何账户，因此我们不会收集您的姓名、电子邮件、电话号码等信息。</li>
+            <li><strong>无遥测与日志：</strong>本应用不包含任何内置的数据统计、崩溃日志收集或行为追踪代码。我们无法得知您何时使用了本应用，也不知道您如何使用它。</li>
+            <li><strong>网络请求：</strong>当您使用壁纸下载功能时，本应用会向互联网服务器发起请求以获取图片资源。在此过程中，我们<strong>不会记录或存储</strong>您的 IP
+                地址、设备标识符（MAC 地址）、操作系统版本等任何设备信息。</li>
+        </ul>
+
+        <h2>3. 本地数据的存储与处理</h2>
+        <p>为了提供正常的功能，本应用需要在您的设备上访问和存储以下数据。<strong>这些数据均保存在您的个人设备上，我们无权访问：</strong></p>
+        <ul>
+            <li><strong>图片文件：</strong>当您选择下载壁纸时，应用需要访问您的本地存储以保存图片。</li>
+            <li><strong>用户设置：</strong>应用会在本地存储您的偏好设置（如应用配置、界面选项等）。目前暂无用户个性化数据，未来若增加相关功能，也仅在本地处理。</li>
+        </ul>
+
+        <h2>4. 系统权限与平台说明</h2>
+        <p>为了实现图片保存和偏好设置功能，本应用在不同平台上需要相应的系统权限：</p>
+        <ul>
+            <li><strong>Windows 桌面端（MSIX）：</strong>需要访问文件系统（资源管理器）以保存壁纸和读取设置文件。作为桌面应用，系统会默认使用 <code>runFullTrust</code>
+                权限以保障程序正常运行，但该权限绝不会被用于收集您的隐私数据。</li>
+            <li><strong>Android 端：</strong>需要申请设备存储（或相册）的写入权限，仅用于将您选择的壁纸保存到本地设备中。</li>
+            <li><strong>Web 网页端：</strong>依赖浏览器默认的下载机制。只有当您主动点击下载时，浏览器才会将文件保存到您的本地设备，本应用不会强行读取您的本地文件。</li>
+        </ul>
+
+        <h2>5. 第三方服务</h2>
+        <p>本应用目前未集成任何第三方广告、分析或数据追踪 SDK。未来若引入相关服务，我们将更新本政策并明确告知。</p>
+
+        <h2>6. 儿童隐私</h2>
+        <p>本应用不针对 13 岁以下的儿童收集任何个人信息。由于本应用不收集任何数据，因此不存在针对儿童的数据收集风险。</p>
+
+        <h2>7. 政策更新</h2>
+        <p>我们可能会不时更新本隐私政策。任何更改将在本页面发布，并更新顶部的“生效日期”。建议您定期查看本政策。</p>
+
+        <h2>8. 联系我们</h2>
+        <p>如果您对本隐私政策有任何疑问或建议，请通过以下方式与我们联系：</p>
+        <p>邮箱：<a href="mailto:1224021291@qq.com">1224021291@qq.com</a></p>
+        <h2>9. 知识产权与免责声明</h2>
+        <p>本应用为第三方非官方粉丝作品。“重返未来：1999”及其相关的游戏名称、角色形象、图像素材及商标等知识产权，均归其原权利方（包括但不限于广州深蓝互动网络科技有限公司）所有。</p>
+        <p>本应用内展示及提供下载的壁纸资源均来源于互联网及游戏官方公开渠道，仅供玩家个人学习、交流与欣赏使用，请勿用于任何商业用途。本应用开发者与游戏官方无任何隶属或合作关系。如有侵权，请联系我们删除。</p>
+    </div>
+
+    <!-- 英文内容 -->
+    <div class="en">
+        <h1>Re:1999 Archive - Privacy Policy</h1>
+        <div class="meta-info">
+            <p><strong>Effective Date:</strong> October 31, 2026</p>
+            <p><strong>Developer:</strong> MoMo</p>
+            <p><strong>Contact Email:</strong> <a href="mailto:1224021291@qq.com">1224021291@qq.com</a></p>
+        </div>
+
+        <h2>1. Introduction</h2>
+        <p>This Privacy Policy explains how "Re:1999 Archive" (hereinafter referred to as "the Application")
+            handles your information. The Application covers Windows Desktop, Android, and Web platforms. We highly
+            value your privacy, and the design principle of this Application is to <strong>minimize the exposure and
+                processing of data</strong>.</p>
+
+        <h2>2. Information We Collect and Use</h2>
+        <p><strong>The Application does not collect, store, or transmit your personally identifiable information or
+                device information to any third parties.</strong></p>
+        <p>Specific details are as follows:</p>
+        <ul>
+            <li><strong>No Account System:</strong> The Application currently does not require you to register or log in
+                to any account. Therefore, we do not collect your name, email address, phone number, or other
+                information.</li>
+            <li><strong>No Telemetry or Logs:</strong> The Application does not contain any built-in data statistics,
+                crash log collection, or behavior tracking code. We cannot know when you use the Application or how you
+                use it.</li>
+            <li><strong>Network Requests:</strong> When you use the wallpaper download feature, the Application
+                initiates requests to internet servers to fetch image resources. During this process, we <strong>do not
+                    record or store</strong> your IP address, device identifier (MAC address), operating system version,
+                or any other device information.</li>
+        </ul>
+
+        <h2>3. Local Data Storage and Processing</h2>
+        <p>To provide normal functionality, the Application needs to access and store the following data on your device.
+            <strong>This data is stored solely on your personal device, and we have no access to it:</strong>
+        </p>
+        <ul>
+            <li><strong>Image Files:</strong> When you choose to download a wallpaper, the Application needs to access
+                your local storage to save the image.</li>
+            <li><strong>User Settings:</strong> The Application stores your preferences (e.g., app configuration,
+                interface options) locally. Currently, there is no user personalization data; if such features are added
+                in the future, they will only be processed locally.</li>
+        </ul>
+
+        <h2>4. System Permissions and Platform Details</h2>
+        <p>To achieve image saving and preference settings, the Application requires specific permissions on different
+            platforms:</p>
+        <ul>
+            <li><strong>Windows Desktop (MSIX):</strong> Requires file system access (File Explorer) to save wallpapers
+                and read setting files. As a desktop app, it uses the <code>runFullTrust</code> capability by default to
+                ensure normal operation, which is never used to collect your private data.</li>
+            <li><strong>Android:</strong> Requires storage/gallery write permission solely to save your selected
+                wallpapers to your local device.</li>
+            <li><strong>Web:</strong> Relies on the browser's default download mechanism. Files are only saved to your
+                local device when you actively click download. The Application does not force access to your local
+                files.</li>
+        </ul>
+
+        <h2>5. Third-Party Services</h2>
+        <p>The Application currently does not integrate any third-party advertising, analytics, or data tracking SDKs.
+            If such services are introduced in the future, we will update this policy and notify you accordingly.</p>
+
+        <h2>6. Children's Privacy</h2>
+        <p>The Application does not collect any personal information from children under 13. Since the Application does
+            not collect any data, there is no risk of data collection concerning children.</p>
+
+        <h2>7. Policy Updates</h2>
+        <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page, and the
+            "Effective Date" at the top will be updated. We recommend that you review this policy periodically.</p>
+
+        <h2>8. Contact Us</h2>
+        <p>If you have any questions or suggestions regarding this Privacy Policy, please contact us via:</p>
+        <p>Email: <a href="mailto:1224021291@qq.com">1224021291@qq.com</a></p>
+        <h2>9. Intellectual Property and Disclaimer</h2>
+        <p>This application is a third-party, unofficial fan-made project. "Reverse: 1999" and all related game titles,
+            character designs, image assets, and trademarks are the intellectual property of their respective owners
+            (including but not limited to Bluepoch Co., Ltd.).</p>
+        <p>The wallpapers displayed and provided for download in this application are sourced from the internet and
+            official public channels, intended solely for personal study, communication, and appreciation. Please do not
+            use them for any commercial purposes. The developer of this application is not affiliated with the game's
+            official entities. If there is any infringement, please contact us for removal.</p>
+    </div>
+
+    <script>
+        function toggleLanguage() {
+            const body = document.body;
+            body.classList.toggle('lang-en');
+
+            if (body.classList.contains('lang-en')) {
+                document.documentElement.lang = 'en';
+                document.title = 'Privacy Policy - Re:1999 Archive';
+            } else {
+                document.documentElement.lang = 'zh-CN';
+                document.title = '隐私政策 - 默默的小站：游戏壁纸';
+            }
+        }
+    </script>
+</body>
+
+</html>

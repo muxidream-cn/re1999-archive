@@ -1,0 +1,78 @@
+{
+  "name": "默默的小站：游戏壁纸",
+  "short_name": "Re:1999 ARCHIVE ",
+  "display_override": [
+    "window-control-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "lang": "zh-CN",
+  "background_color": "#000",
+  "description": "默默的小站：游戏壁纸。建设中...",
+  "icons": [
+    {
+      "src": "/favicon_16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon_42x42.ico",
+      "sizes": "42x42",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon_64x64.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon_96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon_128x128.ico",
+      "sizes": "128x128",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon_144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "以影像之下载",
+      "short_name": "1999",
+      "url": "/wallpaper/home",
+      "description": "重返未来1999以影像之壁纸下载",
+      "icons": [
+        {
+          "src": "/favicon_96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/images/pwa_pc.jpg",
+      "sizes": "1962x1120",
+      "type": "image/jpg",
+      "form_factor": "wide",
+      "label": "首页"
+    },
+    {
+      "src": "/images/pwa_mobile.jpg",
+      "sizes": "563x1000",
+      "type": "image/jpg",
+      "form_factor": "narrow",
+      "label": "首页"
+    }
+  ]
+}

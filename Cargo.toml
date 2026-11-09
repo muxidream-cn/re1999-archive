@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "packages/app_tauri"
+]
+resolver = "2"

@@ -1,0 +1,115 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "启动 app-windows",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"dev:desktop",
+			],
+			"detail": "pnpm --dir packages/app_tauri tauri dev --config tauri.windows.conf.json",
+			"problemMatcher": [],
+		},
+		{
+			"label": "打包 app-windows",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"build:desktop",
+			],
+			"detail": "pnpm --dir packages/app_tauri tauri build --config tauri.windows.conf.json",
+			"problemMatcher": [],
+		},
+		{
+			"label": "打包 app-windows 微软商店版本",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"build:desktop:microsoft-store",
+			],
+			"detail": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File packages/app_tauri/scripts/build-microsoft-store.ps1",
+			"problemMatcher": [],
+		},
+		{
+			"label": "启动 app-android",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"dev:app",
+			],
+			"detail": "pnpm --dir packages/app_tauri tauri android dev --config tauri.android.conf.json",
+			"problemMatcher": [],
+		},
+		{
+			"label": "打包 app-android",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"build:app",
+			],
+			"detail": "pnpm --dir packages/app_tauri tauri android build --config tauri.android.conf.json",
+			"problemMatcher": [],
+		},
+		{
+			"label": "启动 web",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"dev:web",
+			],
+			"detail": "pnpm -F app_web dev",
+			"problemMatcher": [],
+		},
+		{
+			"label": "打包 web",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"build:web",
+			],
+			"detail": "pnpm -F app_web build",
+			"problemMatcher": [],
+		},
+		{
+			"label": "预览 web 端打包后的代码(生产模式)",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"preview:web",
+			],
+			"detail": "pnpm -F app_web preview",
+			"problemMatcher": [],
+		},
+		{
+			"label": "启动后端",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"dev:server",
+			],
+			"detail": "pnpm -F app_server start",
+			"problemMatcher": [],
+		},
+		{
+			"label": "更新下载器版本号",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"updateVersion",
+			],
+			"detail": "node scripts/updateVersion.js",
+			"problemMatcher": [],
+		},
+		{
+			"label": "启动文档项目",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"dev:docs",
+			],
+			"detail": "pnpm -F re1999-docs docs:dev",
+			"problemMatcher": [],
+		},
+	]
+}

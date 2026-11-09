@@ -1,0 +1,46 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "moduleDetection": "force",
+        "noEmit": true,
+        "strict": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "types": [
+            "node",
+            "vite-plugin-svg-icons-ng/client"
+        ],
+        "paths": {
+            "@app/core": [
+                "./src/index.ts"
+            ],
+            "@app/core/*": [
+                "./src/*"
+            ],
+            "@components/*": [
+                "./src/components/*"
+            ],
+            "@shadcn/ui/*": [
+                "./src/components/ui/*"
+            ],
+            "@serverSchema/*": [
+                "../../schema/server/*"
+            ],
+        }
+    },
+    "include": [
+        "vite.shared.ts",
+        "src/**/*.ts",
+        "src/**/*.vue",
+        "src/**/*.d.ts",
+        "vite.config.ts",
+        "auto-imports.d.ts",
+        "../../splitTextTool.ts",
+        "../../SplitText.vue",
+    ],
+    "files": [
+        "node_modules/gsap/types/index.d.ts"
+    ]
+}

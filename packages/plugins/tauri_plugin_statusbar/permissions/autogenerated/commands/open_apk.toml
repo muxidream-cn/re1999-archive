@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-open-apk"
+description = "Enables the open_apk command without any pre-configured scope."
+commands.allow = ["open_apk"]
+
+[[permission]]
+identifier = "deny-open-apk"
+description = "Denies the open_apk command without any pre-configured scope."
+commands.deny = ["open_apk"]

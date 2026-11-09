@@ -1,0 +1,52 @@
+User-agent: 360Spider
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: Applebot
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: Baiduspider
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: bingbot
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: DuckDuckBot
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: DuckDuckGo-Favicons-Bot
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: Googlebot
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: Sogou inst spider
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: Sogou web spider
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: Yisouspider
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+User-agent: *
+Disallow: /

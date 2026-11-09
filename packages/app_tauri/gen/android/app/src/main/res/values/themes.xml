@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!-- Base application theme. -->
+  <style name="Theme.app" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- 让状态栏透明，背景可以延伸到状态栏区域 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

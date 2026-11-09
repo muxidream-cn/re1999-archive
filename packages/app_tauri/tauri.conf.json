@@ -1,0 +1,76 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "默默的小站：游戏壁纸",
+  "version": "0.2.0",
+  "identifier": "com.muxidream.re1999archive",
+  "build": {
+    "frontendDist": "../app_windows/dist",
+    "devUrl": "http://localhost:5172",
+    "beforeDevCommand": "pnpm -F app_windows dev",
+    "beforeBuildCommand": "pnpm -F app_windows build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "默默的小站：游戏壁纸",
+        "width": 1280,
+        "height": 720,
+        "minWidth": 960,
+        "minHeight": 540,
+        "center": true,
+        "resizable": true,
+        "fullscreen": false,
+        "visible": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self' ws://127.0.0.1:* ws://localhost:*; img-src * data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' http://ipc.localhost https://*.muxidream.cn https: ws://127.0.0.1:* ws://localhost:*; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico",
+      "icons/icon.png",
+      "icons/Square30x30Logo.png",
+      "icons/Square44x44Logo.png",
+      "icons/Square71x71Logo.png",
+      "icons/Square89x89Logo.png",
+      "icons/Square107x107Logo.png",
+      "icons/Square142x142Logo.png",
+      "icons/Square150x150Logo.png",
+      "icons/Square284x284Logo.png",
+      "icons/Square310x310Logo.png",
+      "icons/StoreLogo.png"
+    ],
+    "android": {
+      "debugApplicationIdSuffix": ".debug"
+    },
+    "windows": {
+      "wix": {
+        "language": ["zh-CN"]
+      },
+      "nsis": {
+        "languages": ["SimpChinese"],
+        "installMode": "both",
+        "displayLanguageSelector": true
+      }
+    },
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDVDNThDODdGMjQ0NUY4NEMKUldSTStFVWtmOGhZWENrVFF0Vk5xRnQyTkZKMW1CdHkrNmx6MnlCK0djaVVnc1dTQkVIUG5aYmMK",
+      "endpoints": ["https://download.muxidream.cn/api/app/check/{{target}}/{{current_version}}"],
+      "dangerousInsecureTransportProtocol": true,
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  }
+}

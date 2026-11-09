@@ -1,0 +1,14 @@
+{
+  "identifier": "mobile-capability",
+  "description": "Mobile permissions",
+  "platforms": [
+    "android",
+    "iOS"
+  ],
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "status-bar:allow-set-statusbar-light"
+  ]
+}
