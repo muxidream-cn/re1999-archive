@@ -4,40 +4,52 @@
 
 <kbd>简体中文</kbd> | <a href="./README.en.md"><kbd>English</kbd></a>
 
+> ⚠️ Notice: 本仓库包含私有子模块（后端 `packages/app_server`）。没有该仓库的访问权限时，`git submodule update --init` 会失败。
+
 ## 安装
 
-拉取项目，在根目录下执行 `pnpm i` 安装依赖
+```bash
+git clone https://github.com/muxidream-cn/re1999-archive.git
+cd re1999-archive
+pnpm install
+```
+
+子模块按需初始化，没有后端权限时只初始化文档站即可：
+
+```bash
+git submodule update --init packages/re1999-docs
+```
 
 ## 目录结构说明
 
-| 路径                                       | 说明                                       |
-| ------------------------------------------ | ------------------------------------------ |
-| `.github/`                                 | 工作流与按需加载的项目规范（instructions） |
-| `.husky/`                                  | Git Hooks 配置（commit-msg、pre-commit）   |
-| `docs/`                                    | 项目文档                                   |
-| `packages/`                                | monorepo 子项目                            |
-| `packages/app_android/`                    | Android 应用相关代码                       |
-| `packages/app_core/`                       | 前端公共核心包                             |
-| `packages/app_server/`                     | 服务端应用                                 |
-| `packages/app_tauri/`                      | Tauri 桌面/移动端应用                      |
-| `packages/app_web/`                        | Web 应用                                   |
-| `packages/app_windows/`                    | Windows 应用相关代码                       |
-| `packages/plugins/`                        | 工作区插件包                               |
-| `packages/plugins/tauri_plugin_statusbar/` | 状态栏 Tauri 插件                          |
-| `packages/re1999-docs/`                    | 文档站点（规划中）                         |
-| `schema/`                                  | 数据或接口 schema                          |
-| `scripts/`                                 | 项目维护脚本（如版本更新）                 |
-| `types/`                                   | 公共类型定义                               |
-| `package.json`                             | 根项目依赖、脚本和工作流配置               |
-| `pnpm-workspace.yaml`                      | pnpm monorepo 工作区配置                   |
-| `pnpm-lock.yaml`                           | pnpm 依赖锁文件                            |
-| `Cargo.toml`                               | Rust workspace 配置                        |
-| `Cargo.lock`                               | Rust 依赖锁文件                            |
-| `eslint.config.js`                         | ESLint 配置                                |
-| `.prettierrc.cjs`                          | Prettier 配置                              |
-| `commitlint.config.cjs`                    | commitlint 和 cz-git 配置                  |
-| `README.md`                                | 本说明文档                                 |
-| `README.en.md`                             | 英文说明文档（占位模板，待完善）           |
+| 路径                                             | 说明                                       |
+| ---------------------------------------------- | ------------------------------------------ |
+| `.github/`                                     | 工作流与按需加载的项目规范（instructions） |
+| `.husky/`                                      | Git Hooks 配置（commit-msg、pre-commit）   |
+| `docs/`                                        | 项目文档                                   |
+| `packages/`                                    | monorepo 子项目                            |
+| `packages/app_android/`                        | Android 应用相关代码                       |
+| `packages/app_core/`                           | 前端公共核心包                             |
+| `packages/app_server/`                         | 服务端应用（私有子模块，需授权）           |
+| `packages/app_tauri/`                          | Tauri 桌面/移动端应用                      |
+| `packages/app_web/`                            | Web 应用                                   |
+| `packages/app_windows/`                        | Windows 应用相关代码                       |
+| `packages/app_plugins/`                        | 工作区插件包                               |
+| `packages/app_plugins/tauri_plugin_statusbar/` | 状态栏 Tauri 插件                          |
+| `packages/re1999-docs/`                        | 文档站（子模块，CC-BY-4.0）                |
+| `schema/`                                      | 数据或接口 schema                          |
+| `scripts/`                                     | 项目维护脚本（如版本更新）                 |
+| `types/`                                       | 公共类型定义                               |
+| `package.json`                                 | 根项目依赖、脚本和工作流配置               |
+| `pnpm-workspace.yaml`                          | pnpm monorepo 工作区配置                   |
+| `pnpm-lock.yaml`                               | pnpm 依赖锁文件                            |
+| `Cargo.toml`                                   | Rust workspace 配置                        |
+| `Cargo.lock`                                   | Rust 依赖锁文件                            |
+| `eslint.config.js`                             | ESLint 配置                                |
+| `.prettierrc.cjs`                              | Prettier 配置                              |
+| `commitlint.config.cjs`                        | commitlint 和 cz-git 配置                  |
+| `README.md`                                    | 本说明文档                                 |
+| `README.en.md`                                 | 英文说明文档（占位模板，待完善）           |
 
 ## 项目文档
 
@@ -65,6 +77,30 @@
 | [Microsoft Store 打包](<./packages/app_tauri/docs/Microsoft Store 打包.md>) | MSIX 打包流程与商店验证问题          |
 | [本地测试程序更新](<./packages/app_tauri/docs/本地测试程序更新.md>)         | 本地后端与客户端联调更新链路         |
 
+## 子模块
+
+| 路径                    | 远程地址                                            | 说明                       |
+| ----------------------- | --------------------------------------------------- | -------------------------- |
+| `packages/re1999-docs/` | <https://github.com/muxidream-cn/re1999-docs.git>   | 文档站，开源，CC-BY-4.0    |
+| `packages/app_server/`  | <https://github.com/muxidream-cn/re1999-server.git> | 后端服务，闭源，需仓库权限 |
+
+无权限时只初始化文档站：
+
+```bash
+git submodule update --init packages/re1999-docs
+```
+
+### 子模块脚本
+
+| 子模块        | 脚本                  | 说明                                     |
+| ------------- | --------------------- | ---------------------------------------- |
+| `re1999-docs` | `docs:dev`            | 启动文档站开发服务器（默认 8080 端口）   |
+| `re1999-docs` | `docs:build`          | 构建静态文档站                           |
+| `re1999-docs` | `docs:clean-dev`      | 清除缓存后启动开发服务器                 |
+| `re1999-docs` | `docs:update-package` | 升级 VuePress 相关依赖                   |
+| `app_server`  | `start`               | 开发模式启动后端（根脚本 `dev:server`）  |
+| `app_server`  | `start:prod`          | 生产模式启动后端（根脚本 `prod:server`） |
+
 ## 脚本说明
 
 | 脚本                            | 说明                                                                             |
@@ -78,8 +114,8 @@
 | `commit`                        | 暂存区检查并进入引导式提交                                                       |
 | `dev:app`                       | 启动 Android 开发环境                                                            |
 | `dev:desktop`                   | 启动桌面端开发环境                                                               |
-| `dev:docs`                      | 启动文档站开发服务器                                                             |
-| `dev:server`                    | 启动服务端开发环境                                                               |
+| `dev:docs`                      | 启动文档站开发服务器（需初始化 `packages/re1999-docs` 子模块）                   |
+| `dev:server`                    | 启动服务端开发环境（需初始化私有子模块 `packages/app_server`）                   |
 | `dev:web`                       | 启动 Web 开发服务器                                                              |
 | `lint`                          | ESLint 检查并自动修复                                                            |
 | `lint:commitlint`               | 校验 commit 信息                                                                 |
@@ -87,7 +123,7 @@
 | `lint-staged`                   | 检查并修复暂存区文件                                                             |
 | `prepare`                       | 初始化 Husky Git Hooks                                                           |
 | `preview:web`                   | 预览 Web 构建产物                                                                |
-| `prod:server`                   | 启动服务端生产环境                                                               |
+| `prod:server`                   | 启动服务端生产环境（需初始化私有子模块 `packages/app_server`）                   |
 | `updateVersion`                 | 更新各子项目版本号（`--major` / `--minor` / `--patch` 选择递增位，默认 `patch`） |
 
 ## Git 提交规范
@@ -140,7 +176,7 @@ commit 信息输入完成之后会触发格式检查，检查无误才会将代�
 
 4、引导式提交中的第3步和第4步
 
-> 此工作流程详细介绍可查看：[代码审查和 git commit 引导、校验工作流](https://mp.weixin.qq.com/s/ta7lt3-BZvkLyjyLW934BA)
+> 此工作流程详细介绍可查看：[代码审查和 git commit 引导、校验工作流](https://blogs.muxidream.cn/technology/commit)
 
 ## 许可证
 

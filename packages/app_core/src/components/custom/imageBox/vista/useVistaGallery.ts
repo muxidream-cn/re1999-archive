@@ -45,7 +45,7 @@ const buildControls = (isMobile: boolean): VistaOpt["controls"] => ({
   // 不显式覆盖会残留库自带的说明控件：它与自研的 .vvg-caption 内容重复，
   // 还会占住底部栏左侧槽位，把底部区域挤成「说明文字 + 缩略图带」的左右布局
   bottomLeft: [],
-  // 移动端右栏与桌面端同源，窄屏放不下时由 overflowMenu 扩展把「四个翻转 + 自动播放」
+  // 移动端右栏与桌面端同源，窄屏放不下时由 overflowMenu 扩展把「四个翻转」
   // 收进 more 菜单，见 extensions/overflowMenu.ts
   topRight: isMobile
     ? [
@@ -151,7 +151,7 @@ export const useVistaGallery = (options: UseVistaGalleryOptions) => {
       // 移动端隐藏全屏：Tauri 的 Android WebView 不支持 Fullscreen API，按钮点了只会静默无效
       ...(mobile ? [] : [createFullscreenExtension()]),
       // 只有移动端顶栏会溢出；桌面端按钮放得下，不引入 more 入口
-      ...(mobile ? [createOverflowMenuExtension({ items: [...rotate, autoplay] })] : []),
+      ...(mobile ? [createOverflowMenuExtension({ items: [...rotate] })] : []),
     ]
 
     // 数组模式只投射 src 与 alt，说明文字/缩略图/下载字段全部按索引从 list 现算。

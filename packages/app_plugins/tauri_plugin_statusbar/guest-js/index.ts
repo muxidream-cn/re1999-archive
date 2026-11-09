@@ -1,5 +1,9 @@
 import { invoke } from "@tauri-apps/api/core"
 
+/**
+ *
+ * @param light
+ */
 export async function setStatusBarLight(light: boolean): Promise<boolean> {
   return await invoke<{ success: boolean }>("plugin:status-bar|set_statusbar_light", {
     light,

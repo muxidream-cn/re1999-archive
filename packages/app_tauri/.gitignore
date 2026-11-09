@@ -18,6 +18,11 @@ Cargo.lock
 !/gen/android/app/src/main/res/xml/file_paths.xml
 /src-tauri/gen/
 
+# Android 构建期产物：Tauri CLI / Gradle 会在 android init 或 build 时重建，不入库
+/gen/android/app/src/main/assets/
+/gen/android/app/src/main/java/**/generated/
+/gen/android/app/src/main/jniLibs/
+
 # 环境变量
 .env
 .env.local

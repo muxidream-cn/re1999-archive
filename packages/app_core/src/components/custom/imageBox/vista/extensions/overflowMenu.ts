@@ -18,8 +18,8 @@ export type OverflowMenuOptions = {
 /**
  * 顶部工具栏溢出菜单
  *
- * 移动端右侧工具组在窄屏（360px 级别）放不下，挤压时整组会被 .vvw-container 的 overflow: clip 裁掉，
- * 表现为「全屏 / 自动播放」等按钮直接消失且点不到。这里按顶部工具栏的实际宽度测量：
+ * 移动端（<768px）右侧工具组放不下，挤压时整组会被 .vvw-container 的 overflow: clip 裁掉，
+ * 表现为「四个翻转」等按钮直接消失且点不到。这里按顶部工具栏的实际宽度测量：
  * 放不下就把 items 移进 more 菜单，放得下再移回工具栏原位。
  *
  * 测量前必须先恢复展开态——收起后的布局必然不溢出，直接量会一直停在收起状态。
@@ -122,10 +122,10 @@ export const createOverflowMenuExtension = ({ items }: OverflowMenuOptions): Vis
     onOpen: (vistaView) => {
       const root = vistaView.imageContainer?.closest<HTMLElement>(".vvw-root") ?? null
       bar = root?.querySelector<HTMLElement>(".vvw-top-bar") ?? null
-      // 顶栏第三个子元素是右侧工具组；三点定位必须在挂菜单之前完成，挂上去后它就不再是最后一个子节点
-      const slotElement = bar?.lastElementChild
-      slot = slotElement instanceof HTMLElement ? slotElement : null
-      trigger = slot?.querySelector<HTMLElement>(`[data-vvw-control="${OVERFLOW_MENU_NAME}"]`) ?? null
+      // 由 more 控件自身反推所在工具组：顶栏除三个分组外还有 imageLoading 追加的指示器，
+      // 不能假设「最后一个子元素就是右侧工具组」；槽位也必须在挂菜单之前取到
+      trigger = bar?.querySelector<HTMLElement>(`[data-vvw-control="${OVERFLOW_MENU_NAME}"]`) ?? null
+      slot = trigger?.parentElement ?? null
       nodes = items
         .map((item) => slot?.querySelector<HTMLElement>(`[data-vvw-control="${item.name}"]`) ?? null)
         .filter((node): node is HTMLElement => node !== null)

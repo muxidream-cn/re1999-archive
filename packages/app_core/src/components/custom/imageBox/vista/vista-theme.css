@@ -544,7 +544,7 @@
   outline-offset: 1px;
 }
 
-/* ---------- 移动端尺寸（Tailwind md 及以下，与 useDevice 的 smaller("md") 同界） ---------- */
+/* ---------- 移动端尺寸（Tailwind md 以下，与 useDevice 的 smaller("md") 同界） ---------- */
 
 @media (max-width: 767px) {
   /*

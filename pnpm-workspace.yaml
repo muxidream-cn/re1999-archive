@@ -22,8 +22,8 @@ allowBuilds:
 packages:
   # packages/ 直接子目录中的所有包 - 所有前端项目存储的目录
   - 'packages/*'
-  # packages/plugins/ 中的所有插件包
-  - 'packages/plugins/*'
+  # packages/app_plugins/ 中的所有插件包
+  - 'packages/app_plugins/*'
   # components/ 子目录中的所有包 - 给所有项目使用的公共组件
   - 'components/**'
   # utils/ 子目录中的所有包 - 给所有项目使用的公共工具库

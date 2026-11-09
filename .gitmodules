@@ -1,0 +1,6 @@
+[submodule "packages/re1999-docs"]
+	path = packages/re1999-docs
+	url = https://github.com/muxidream-cn/re1999-docs.git
+[submodule "packages/app_server"]
+	path = packages/app_server
+	url = https://github.com/muxidream-cn/re1999-server.git

@@ -34,7 +34,7 @@ tauri-plugin-persisted-scope = "=2.3.8"
 tauri-plugin-dialog = "2"
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "stream"] }
 tokio = { version = "1", features = ["time"] }
-tauri-plugin-status-bar = { path = "../plugins/tauri_plugin_statusbar" }
+tauri-plugin-status-bar = { path = "../app_plugins/tauri_plugin_statusbar" }
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-updater = "2"

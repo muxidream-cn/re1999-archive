@@ -4,40 +4,52 @@ Game wallpaper archive monorepo
 
 <a href="./README.md"><kbd>简体中文</kbd></a> | <kbd>English</kbd>
 
+> ⚠️ Notice: This project contains a private submodule (backend). Running `git submodule update --init` will fail if you don't have access.
+
 ## Installation
 
-Clone the project and run the following in the repository root: `pnpm i`
+```bash
+git clone https://github.com/muxidream-cn/re1999-archive.git
+cd re1999-archive
+pnpm install
+```
+
+Initialize the submodules you need; without backend access, initialize the docs site only:
+
+```bash
+git submodule update --init packages/re1999-docs
+```
 
 ## Directory Structure
 
-| Path                                        | Description                                          |
-| ------------------------------------------- | ---------------------------------------------------- |
-| `.github/`                                  | Workflows and on-demand project rules (instructions) |
-| `.husky/`                                   | Git hooks configuration (commit-msg, pre-commit)     |
-| `docs/`                                     | Project documentation                                |
-| `packages/`                                 | Monorepo sub-projects                                |
-| `packages/app_android/`                     | Android app code                                     |
-| `packages/app_core/`                        | Shared frontend core package                         |
-| `packages/app_server/`                      | Server application                                   |
-| `packages/app_tauri/`                       | Tauri desktop/mobile application                     |
-| `packages/app_web/`                         | Web application                                      |
-| `packages/app_windows/`                     | Windows app code                                     |
-| `packages/plugins/`                         | Workspace plugin packages                            |
-| `packages/plugins/tauri_plugin_statusbar/`  | Status bar Tauri plugin                              |
-| `packages/re1999-docs/`                     | Documentation site (planned)                         |
-| `schema/`                                   | Data / API schemas                                   |
-| `scripts/`                                  | Maintenance scripts (e.g. version bump)              |
-| `types/`                                    | Shared type definitions                              |
-| `package.json`                              | Root dependencies, scripts and workflow config       |
-| `pnpm-workspace.yaml`                       | pnpm monorepo workspace config                       |
-| `pnpm-lock.yaml`                            | pnpm lockfile                                        |
-| `Cargo.toml`                                | Rust workspace config                                |
-| `Cargo.lock`                                | Rust lockfile                                        |
-| `eslint.config.js`                          | ESLint config                                        |
-| `.prettierrc.cjs`                           | Prettier config                                      |
-| `commitlint.config.cjs`                     | commitlint and cz-git config                         |
-| `README.md`                                 | Chinese documentation                                |
-| `README.en.md`                              | English documentation (this file)                    |
+| Path                                           | Description                                             |
+| ---------------------------------------------- | ------------------------------------------------------- |
+| `.github/`                                     | Workflows and on-demand project rules (instructions)    |
+| `.husky/`                                      | Git hooks configuration (commit-msg, pre-commit)        |
+| `docs/`                                        | Project documentation                                   |
+| `packages/`                                    | Monorepo sub-projects                                   |
+| `packages/app_android/`                        | Android app code                                        |
+| `packages/app_core/`                           | Shared frontend core package                            |
+| `packages/app_server/`                         | Server application (private submodule, access required) |
+| `packages/app_tauri/`                          | Tauri desktop/mobile application                        |
+| `packages/app_web/`                            | Web application                                         |
+| `packages/app_windows/`                        | Windows app code                                        |
+| `packages/app_plugins/`                        | Workspace plugin packages                               |
+| `packages/app_plugins/tauri_plugin_statusbar/` | Status bar Tauri plugin                                 |
+| `packages/re1999-docs/`                        | Documentation site (submodule, CC-BY-4.0)               |
+| `schema/`                                      | Data / API schemas                                      |
+| `scripts/`                                     | Maintenance scripts (e.g. version bump)                 |
+| `types/`                                       | Shared type definitions                                 |
+| `package.json`                                 | Root dependencies, scripts and workflow config          |
+| `pnpm-workspace.yaml`                          | pnpm monorepo workspace config                          |
+| `pnpm-lock.yaml`                               | pnpm lockfile                                           |
+| `Cargo.toml`                                   | Rust workspace config                                   |
+| `Cargo.lock`                                   | Rust lockfile                                           |
+| `eslint.config.js`                             | ESLint config                                           |
+| `.prettierrc.cjs`                              | Prettier config                                         |
+| `commitlint.config.cjs`                        | commitlint and cz-git config                            |
+| `README.md`                                    | Chinese documentation                                   |
+| `README.en.md`                                 | English documentation (this file)                       |
 
 ## Project Docs
 
@@ -65,6 +77,30 @@ Clone the project and run the following in the repository root: `pnpm i`
 | [Microsoft Store Packaging](<./packages/app_tauri/docs/Microsoft Store 打包.md>) | MSIX packaging flow and Store validation issues               |
 | [Local Update Testing](<./packages/app_tauri/docs/本地测试程序更新.md>)          | Local backend and client update flow                          |
 
+## Submodules
+
+| Path                    | Remote URL                                          | Notes                                   |
+| ----------------------- | --------------------------------------------------- | --------------------------------------- |
+| `packages/re1999-docs/` | <https://github.com/muxidream-cn/re1999-docs.git>   | Docs site, open source, CC-BY-4.0       |
+| `packages/app_server/`  | <https://github.com/muxidream-cn/re1999-server.git> | Backend, closed source, requires access |
+
+Without backend access, initialize the docs site only:
+
+```bash
+git submodule update --init packages/re1999-docs
+```
+
+### Submodule Scripts
+
+| Submodule     | Script                | Description                                          |
+| ------------- | --------------------- | ---------------------------------------------------- |
+| `re1999-docs` | `docs:dev`            | Start the docs dev server (port 8080 by default)     |
+| `re1999-docs` | `docs:build`          | Build the static docs site                           |
+| `re1999-docs` | `docs:clean-dev`      | Clear cache and start the dev server                 |
+| `re1999-docs` | `docs:update-package` | Upgrade VuePress-related dependencies                |
+| `app_server`  | `start`               | Start the backend in dev mode (root `dev:server`)    |
+| `app_server`  | `start:prod`          | Start the backend in production (root `prod:server`) |
+
 ## Scripts
 
 | Script                          | Description                                                                                                |
@@ -78,8 +114,8 @@ Clone the project and run the following in the repository root: `pnpm i`
 | `commit`                        | Run staged-file checks and start the guided commit                                                         |
 | `dev:app`                       | Start the Android dev environment                                                                          |
 | `dev:desktop`                   | Start the desktop dev environment                                                                          |
-| `dev:docs`                      | Start the docs site dev server                                                                             |
-| `dev:server`                    | Start the server dev environment                                                                           |
+| `dev:docs`                      | Start the docs site dev server (requires the `packages/re1999-docs` submodule)                             |
+| `dev:server`                    | Start the server dev environment (requires the private `packages/app_server` submodule)                    |
 | `dev:web`                       | Start the web dev server                                                                                   |
 | `lint`                          | Run ESLint with auto-fix                                                                                   |
 | `lint:commitlint`               | Validate the commit message                                                                                |
@@ -87,7 +123,7 @@ Clone the project and run the following in the repository root: `pnpm i`
 | `lint-staged`                   | Run checks and fixes on staged files                                                                       |
 | `prepare`                       | Set up Husky Git hooks                                                                                     |
 | `preview:web`                   | Preview the web build output                                                                               |
-| `prod:server`                   | Start the server in production mode                                                                        |
+| `prod:server`                   | Start the server in production mode (requires the private `packages/app_server` submodule)                 |
 | `updateVersion`                 | Bump versions of all sub-projects (`--major` / `--minor` / `--patch` to pick the part, `patch` by default) |
 
 ## Git Commit Convention
@@ -140,7 +176,7 @@ The detailed commit message rules can be found in `commitlint.config.cjs`; the g
 
 1. Steps 3 and 4 of the guided commit.
 
-> For a detailed walkthrough of this workflow, see: [Code review and git commit guidance/validation workflow](https://mp.weixin.qq.com/s/ta7lt3-BZvkLyjyLW934BA)
+> For a detailed walkthrough of this workflow, see: [Code review and git commit guidance/validation workflow](https://blogs.muxidream.cn/technology/commit)
 
 ## License
 

@@ -53,10 +53,14 @@
     },
     "windows": {
       "wix": {
-        "language": ["zh-CN"]
+        "language": [
+          "zh-CN"
+        ]
       },
       "nsis": {
-        "languages": ["SimpChinese"],
+        "languages": [
+          "SimpChinese"
+        ],
         "installMode": "both",
         "displayLanguageSelector": true
       }
@@ -66,7 +70,9 @@
   "plugins": {
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDVDNThDODdGMjQ0NUY4NEMKUldSTStFVWtmOGhZWENrVFF0Vk5xRnQyTkZKMW1CdHkrNmx6MnlCK0djaVVnc1dTQkVIUG5aYmMK",
-      "endpoints": ["https://download.muxidream.cn/api/app/check/{{target}}/{{current_version}}"],
+      "endpoints": [
+        "https://download.muxidream.cn/api/app/check/{{target}}/{{current_version}}"
+      ],
       "dangerousInsecureTransportProtocol": true,
       "windows": {
         "installMode": "passive"
