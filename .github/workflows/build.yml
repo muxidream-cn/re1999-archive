@@ -93,7 +93,8 @@ jobs:
           cache-on-failure: true
 
       - name: 安装依赖
-        run: pnpm install --frozen-lockfile
+        # 锁文件含 packages/app_server（私有子模块）的 importer，CI 无法检出，frozen 校验必然失败
+        run: pnpm install --no-frozen-lockfile
 
       - name: 生成前端环境变量
         run: node scripts/writeCiEnv.js android
@@ -185,7 +186,8 @@ jobs:
           cache-on-failure: true
 
       - name: 安装依赖
-        run: pnpm install --frozen-lockfile
+        # 锁文件含 packages/app_server（私有子模块）的 importer，CI 无法检出，frozen 校验必然失败
+        run: pnpm install --no-frozen-lockfile
 
       - name: 生成前端环境变量
         run: node scripts/writeCiEnv.js windows
@@ -255,7 +257,8 @@ jobs:
           cache-on-failure: true
 
       - name: 安装依赖
-        run: pnpm install --frozen-lockfile
+        # 锁文件含 packages/app_server（私有子模块）的 importer，CI 无法检出，frozen 校验必然失败
+        run: pnpm install --no-frozen-lockfile
 
       - name: 生成前端环境变量
         run: node scripts/writeCiEnv.js windows
