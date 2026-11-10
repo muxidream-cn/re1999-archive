@@ -5,6 +5,15 @@ import type { AppCheckParams, AppCheckResponse, AppLatestVersion } from "./type"
 import type { ApiResponse } from "@app/core/apis/types"
 
 /**
+ * 读取错误响应体中的提示信息
+ * @param response 失败响应
+ */
+const readErrorMessage = async (response: Response): Promise<string | null> => {
+  const body = (await response.json().catch(() => null)) as { msg?: unknown } | null
+  return typeof body?.msg === "string" && body.msg ? body.msg : null
+}
+
+/**
  * 获取程序检查更新数据；无可用更新时服务端返回 HTTP 204
  * @param params 检查更新参数
  * @param params.platform 目标平台
@@ -17,7 +26,8 @@ const api_app_check = async ({ platform, arch, current_version }: AppCheckParams
   const response = await momo.raw(`${App.check}/${target}/${version}`)
 
   if (response.status === 204) return null
-  if (!response.ok) throw new Error(`检查更新失败：HTTP ${response.status}`)
+  // 服务端以 HTTP 400 表示该平台/架构暂未发布任何版本，优先透出其提示文案
+  if (!response.ok) throw new Error((await readErrorMessage(response)) ?? `检查更新失败：HTTP ${response.status}`)
 
   return (await response.json()) as AppCheckResponse
 }

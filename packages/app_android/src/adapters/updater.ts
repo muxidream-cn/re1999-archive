@@ -1,16 +1,37 @@
 import { api_app_check } from "@app/core/apis/app"
+import { normalizeAppArch } from "@app/core/apis/app/arch"
 import { openUrl } from "@tauri-apps/plugin-opener"
+import { arch, platform } from "@tauri-apps/plugin-os"
 import semver from "semver"
 import { toast } from "vue-sonner"
 
 import { clearAndroidUpdateCache, hasCachedAndroidUpdate, installAndroidUpdate, prepareAndroidUpdate } from "@/services/androidUpdate"
 
 import type { AppUpdater, UpdateDownloadEvent } from "@app/core/adapters/updater"
-import type { AppCheckResponse } from "@app/core/apis/app/type"
+import type { AppCheckParams, AppCheckResponse } from "@app/core/apis/app/type"
 
-const platform = "android"
-const arch = "x86_64"
 const currentVersion: string = import.meta.env.VITE_APP_VERSION
+
+/** 检查目标：平台与架构必须与后端发布记录一致 */
+type CheckTarget = Pick<AppCheckParams, "platform" | "arch">
+
+/** 运行期解析出的检查目标，首次解析后复用 */
+let cachedTarget: CheckTarget | null = null
+
+/**
+ * 获取检查目标平台与架构：安装包实际架构取决于运行设备，不能按编译期假设写死
+ * @returns 平台与架构，架构已归一化为项目规定的取值
+ */
+const getCheckTarget = (): CheckTarget => {
+  if (cachedTarget) return cachedTarget
+
+  const currentArch = normalizeAppArch(arch())
+  // 列表外的架构直接拦截，避免落到后端的「参数验证失败」提示
+  if (!currentArch) throw new Error("暂未支持该架构，请联系开发者提供打包")
+
+  cachedTarget = { platform: platform(), arch: currentArch }
+  return cachedTarget
+}
 
 /** 无可用更新时清理旧安装包；系统安装器正在使用时保留缓存 */
 const noUpdate = async (): Promise<null> => {
@@ -47,7 +68,7 @@ const openUpdateDownloadLink = async (update: AppCheckResponse) => {
 
 export const androidUpdater: AppUpdater<AppCheckResponse> = {
   async check() {
-    const res = await api_app_check({ platform, arch, current_version: currentVersion })
+    const res = await api_app_check({ ...getCheckTarget(), current_version: currentVersion })
     if (!res) return await noUpdate()
     if (!semver.valid(res.version)) throw new Error("更新接口返回的版本号无效")
     if (semver.compare(res.version, currentVersion) <= 0) return await noUpdate()

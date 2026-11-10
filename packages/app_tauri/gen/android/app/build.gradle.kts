@@ -15,6 +15,20 @@ val tauriProperties =
     }
   }
 
+/** Rust target / flavor 名到 Android ABI 的映射，用于区分各架构的 release 安装包 */
+val abiAliases =
+  mapOf(
+    "aarch64" to "arm64-v8a",
+    "armv7" to "armeabi-v7a",
+    "i686" to "x86",
+    "arm64" to "arm64-v8a",
+    "arm" to "armeabi-v7a",
+  )
+
+/** Tauri CLI 通过 -PabiList / -PtargetList 限制实际打包的 ABI，未传时为空 */
+val tauriAbiList = (project.findProperty("abiList") as? String)?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }.orEmpty()
+val tauriTargetList = (project.findProperty("targetList") as? String)?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }.orEmpty()
+
 android {
   compileSdk = 36
   namespace = "com.muxidream.re1999archive"
@@ -66,17 +80,38 @@ android {
       )
     }
   }
+  // rust 插件按架构创建 flavor 并声明 abiFilters，这里先收集起来供 release 产物命名使用
+  val flavorAbis = mutableMapOf<String, List<String>>()
+  productFlavors.all {
+    flavorAbis[name] = ndk.abiFilters.toList()
+  }
+
   applicationVariants.all {
     val variant = this
     // 明确判断：只有 release 构建才执行重命名
     if (variant.buildType.name == "release") {
+      /*
+       * 按架构区分产物：多架构分别构建时若同名会互相覆盖。
+       * 依次从「flavor 声明的 ABI 过滤 → Tauri 传入的 abiList → targetList → flavor 名」推断，
+       * 都无法确定（如一次打出全部架构）时回落 universal。
+       */
+      val declaredAbis = flavorAbis[variant.flavorName].orEmpty()
+      val abiLabel =
+        declaredAbis.singleOrNull()
+          ?: tauriAbiList.singleOrNull()
+          ?: tauriTargetList.singleOrNull()?.let { abiAliases[it] ?: it }
+          ?: abiAliases[variant.flavorName]
+          ?: "universal"
+
+      logger.lifecycle("release 产物命名使用 ABI 标签: $abiLabel (${variant.name})")
+
       outputs.all {
         val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
         val appName = "默默的小站：游戏壁纸"
         val versionName = variant.versionName
 
         // 使用字符串拼接，防止 IDE 吞掉花括号
-        output.outputFileName = appName + "_" + versionName + ".apk"
+        output.outputFileName = appName + "_" + versionName + "_" + abiLabel + ".apk"
       }
     }
   }

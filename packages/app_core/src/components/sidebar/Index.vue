@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 import { useRouter, useRoute } from "vue-router"
 
 import { openUrl, setStatusBar } from "@app/core/adapters/utils"
+import { formatAppArch } from "@app/core/apis/app/arch"
 import { AppLatestVersion } from "@app/core/apis/app/type"
 import AppSidebar from "@app/core/components/sidebar/components/AppSideBar.vue"
 import useDevice from "@app/core/hooks/useDevice"
@@ -137,6 +138,17 @@ const buttonLists = computed(() => [
 /** 最新的程序版本信息 */
 const versionList = ref<AppLatestVersion[]>([])
 
+/** 按平台聚合的版本信息，同一平台的多个架构分别展示，避免出现重复页签 */
+const platformVersions = computed(() => {
+  const grouped = new Map<string, AppLatestVersion[]>()
+  for (const item of versionList.value) {
+    const list = grouped.get(item.platform)
+    if (list) list.push(item)
+    else grouped.set(item.platform, [item])
+  }
+  return [...grouped].map(([platform, items]) => ({ platform, items }))
+})
+
 const open = ref(false)
 
 onMounted(async () => {
@@ -190,20 +202,22 @@ onMounted(async () => {
                     <TabsTrigger value="android"> <Smartphone class="mr-2 h-4 w-4" /> Android </TabsTrigger>
                   </TabsList>
 
-                  <template v-for="(item, index) in versionList" :key="index">
-                    <TabsContent :value="item.platform">
-                      <div class="flex flex-col items-center justify-center gap-1 opacity-50">
-                        <Label>版本信息：{{ item.platform }}_{{ item.architecture }}_V{{ item.version }}</Label>
-                        <Label>发布时间：{{ dayjs(item.publish_time).format("YY-MM-DD HH:mm:ss") }}</Label>
-                        <Label>文件大小：{{ formatByte(Number(item.file_size), "MB") }}</Label>
-                        <Label class="text-red-500">APP暂未备案，暂不提供分发</Label>
-                        <Button :disabled="true" class="m-2" @click="openUrl(item.download_url)">
-                          <Download />
-                          下载
-                        </Button>
-                      </div>
-                    </TabsContent>
-                  </template>
+                  <TabsContent v-for="group in platformVersions" :key="group.platform" :value="group.platform">
+                    <div
+                      v-for="item in group.items"
+                      :key="`${item.platform}_${item.architecture}`"
+                      class="flex flex-col items-center justify-center gap-1 opacity-50"
+                    >
+                      <Label>版本信息：{{ item.platform }}_{{ formatAppArch(item.architecture) }}_V{{ item.version }}</Label>
+                      <Label>发布时间：{{ dayjs(item.publish_time).format("YY-MM-DD HH:mm:ss") }}</Label>
+                      <Label>文件大小：{{ formatByte(Number(item.file_size), "MB") }}</Label>
+                      <Label class="text-red-500">APP暂未备案，暂不提供分发</Label>
+                      <Button :disabled="true" class="m-2" @click="openUrl(item.download_url)">
+                        <Download />
+                        下载
+                      </Button>
+                    </div>
+                  </TabsContent>
                 </Tabs>
               </DialogContent>
             </Dialog>

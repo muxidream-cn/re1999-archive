@@ -5,7 +5,8 @@
   "author": "默默 (MoMo) <1224021291@qq.com>",
   "type": "module",
   "scripts": {
-    "build:app": "pnpm -F app_tauri tauri android build --config tauri.android.conf.json --target aarch64",
+    "build:app": "node scripts/buildAndroid.js --target aarch64",
+    "build:app:x86_64": "node scripts/buildAndroid.js --target x86_64",
     "build:desktop": "pnpm -F app_tauri tauri build --config tauri.windows.conf.json",
     "build:desktop:microsoft-store": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File packages/app_tauri/scripts/build-microsoft-store.ps1",
     "build:web": "pnpm -F app_web build",

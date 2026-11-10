@@ -20,7 +20,7 @@ const visibleLinks = computed(() => props.appInfo.links.filter((link) => !link.h
   <div class="flex flex-col gap-4 text-left">
     <!-- 应用信息 -->
     <div class="flex items-center gap-4">
-      <div class="bg-primary/10 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg text-2xl">🕷️</div>
+      <img class="bg-primary/10 flex h-14 w-14 shrink-0 items-center justify-center rounded-lg text-2xl" src="/favicon.webp" />
       <div class="flex min-w-0 flex-col gap-1">
         <div class="flex items-center gap-2">
           <span class="text-base font-medium">{{ appInfo.name }}</span>

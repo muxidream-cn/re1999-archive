@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.1",
   "build": {
     "frontendDist": "../app_windows/dist",
     "beforeDevCommand": "pnpm -F app_windows dev",

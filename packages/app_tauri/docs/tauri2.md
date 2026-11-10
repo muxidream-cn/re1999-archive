@@ -89,24 +89,49 @@ src-tauri/gen/ 目录下的文件是由 `tauri android init` 生成的，如果�
 
 ## 修改安卓打包后生成的 APK 命名
 
-在`src-tauri\gen\android\app\build.gradle.kts`中，`buildTypes`的后方添加如下代码(注意与`buildTypes`同级)
+在`src-tauri\gen\android\app\build.gradle.kts`中，`buildTypes`的后方添加如下代码(注意与`buildTypes`同级)。命名带 ABI 后缀，避免 aarch64 与 x86_64 两次构建产物同名互相覆盖：
 
 ``` kts
   applicationVariants.all {
     val variant = this
     // 明确判断：只有 release 构建才执行重命名
     if (variant.buildType.name == "release") {
+      // Tauri 单架构构建会限制实际打包的 ABI，按实际过滤结果决定后缀，多架构时回落 universal
+      val abiLabel = variant.mergedFlavor.ndk.abiFilters.singleOrNull()
+        ?: tauriAbiList.singleOrNull()
+        ?: tauriTargetList.singleOrNull()?.let { abiAliases[it] ?: it }
+        ?: abiAliases[variant.flavorName]
+        ?: "universal"
+
       outputs.all {
         val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
         val appName = "example" //此处写文件名
         val versionName = variant.versionName //此处获取本次的版本号
 
         // 使用字符串拼接最终命名，防止 IDE 吞掉花括号
-        output.outputFileName = appName + "_" + versionName + ".apk"
+        output.outputFileName = appName + "_" + versionName + "_" + abiLabel + ".apk"
       }
     }
   }
 ```
+
+`abiAliases`、`tauriAbiList`、`tauriTargetList` 是同一文件中 `android { }` 之前定义的辅助变量，详见项目内的 `gen/android/app/build.gradle.kts`。
+
+## 多架构打包
+
+Android 安装包按架构分别构建，两条命令互不影响：
+
+``` bash
+pnpm build:app          # aarch64（真机），产物 ..._<版本>_arm64-v8a.apk
+pnpm build:app:x86_64   # x86_64（模拟器 / x86 设备），产物 ..._<版本>_x86_64.apk
+```
+
+两次构建共用同一个 gradle 变体（`universalRelease`），后一次构建会清掉前一次的 APK，因此 `scripts/buildAndroid.js` 在构建结束后把产物复制到
+`packages/app_tauri/target/android/` 归档，并输出文件大小与 MD5。gradle 原始输出仍位于
+`packages/app_tauri/gen/android/app/build/outputs/apk/universal/release/`。
+
+上传更新接口时 `platform` 固定为 `android`，`architecture` 要与客户端运行期上报值一致：aarch64 包填 `aarch64`，x86_64 包填 `x86_64`；
+`file_hash` 用 APK 的 MD5，`file_size` 用实际字节数。
 
 ## 指定Java环境
 

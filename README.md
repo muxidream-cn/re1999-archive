@@ -105,7 +105,8 @@ git submodule update --init packages/re1999-docs
 
 | 脚本                            | 说明                                                            |
 | ------------------------------- | --------------------------------------------------------------- |
-| `build:app`                     | 构建 Android 应用                                               |
+| `build:app`                     | 构建 Android aarch64 安装包（归档到 `packages/app_tauri/target/android`） |
+| `build:app:x86_64`              | 构建 Android x86_64 安装包（归档到 `packages/app_tauri/target/android`）  |
 | `build:desktop`                 | 构建 Windows 桌面应用                                           |
 | `build:desktop:microsoft-store` | 构建 Microsoft Store 安装包                                     |
 | `build:web`                     | 构建 Web 应用                                                   |

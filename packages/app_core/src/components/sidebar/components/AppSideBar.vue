@@ -9,6 +9,7 @@ import {
   GalleryVerticalEnd,
   Map,
   PieChart,
+  Server,
   Settings2,
   SquareTerminal,
   Wallpaper,
@@ -42,7 +43,7 @@ const data = {
   teams: [
     {
       name: "MuxiDream",
-      logo: GalleryVerticalEnd,
+      logo: Server,
       plan: "云端数据库",
     },
     {

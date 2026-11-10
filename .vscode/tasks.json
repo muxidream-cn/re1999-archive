@@ -52,6 +52,16 @@
 			"problemMatcher": [],
 		},
 		{
+			"label": "打包 app-android_x86_64",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"build:app:x86_64",
+			],
+			"detail": "node scripts/buildAndroid.js --target x86_64",
+			"problemMatcher": [],
+		},
+		{
 			"label": "启动 web",
 			"type": "shell",
 			"command": "pnpm",

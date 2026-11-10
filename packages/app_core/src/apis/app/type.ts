@@ -10,10 +10,13 @@ export type AppCheckResponse = {
   version: string
 }
 
+import type { AppArchValue } from "./arch"
+
 /** 各平台及架构的最新发布版本信息 */
 export type AppLatestVersion = {
   platform: string
-  architecture: string
+  /** 架构值；无架构平台返回 universal */
+  architecture: AppArchValue | "universal"
   version: string
   publish_time: string
   file_name: string
@@ -25,6 +28,6 @@ export type AppLatestVersion = {
 /** 检查更新的目标平台、架构和客户端版本 */
 export type AppCheckParams = {
   platform: string
-  arch: string
+  arch: AppArchValue
   current_version: string
 }
