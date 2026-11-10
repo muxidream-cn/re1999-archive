@@ -1,6 +1,9 @@
 [CmdletBinding()]
 param(
-  [string]$OutputDirectory
+  [string]$OutputDirectory,
+  # 只打指定架构的 MSIX。默认 all（x64 + arm64），CI 只打 x64 以缩短时间
+  [ValidateSet("all", "x64", "arm64")]
+  [string]$Architectures = "all"
 )
 
 $ErrorActionPreference = "Stop"
@@ -137,10 +140,16 @@ function Import-Arm64MsvcEnvironment {
   $env:Path = "$($clang.Directory.FullName);$env:Path"
 }
 
-$architectures = @(
-  @{ Name = "x64"; RustTarget = "x86_64-pc-windows-msvc" },
-  @{ Name = "arm64"; RustTarget = "aarch64-pc-windows-msvc" }
-)
+# 外层 @() 保证单架构时也是数组，避免退化成单个 hashtable 影响后续遍历
+# 变量名不能叫 $architectures：PowerShell 变量名大小写不敏感，会和参数 $Architectures 撞车并被其 [string] 约束转成字符串
+$architectureList = @(switch ($Architectures) {
+  "x64" { @{ Name = "x64"; RustTarget = "x86_64-pc-windows-msvc" } }
+  "arm64" { @{ Name = "arm64"; RustTarget = "aarch64-pc-windows-msvc" } }
+  default {
+    @{ Name = "x64"; RustTarget = "x86_64-pc-windows-msvc" }
+    @{ Name = "arm64"; RustTarget = "aarch64-pc-windows-msvc" }
+  }
+})
 
 New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
 $temporaryRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("1999-wallpaper-msix-" + [guid]::NewGuid().ToString("N"))
@@ -148,7 +157,7 @@ $packageDirectory = Join-Path $temporaryRoot "packages"
 New-Item -ItemType Directory -Path $packageDirectory -Force | Out-Null
 
 try {
-  foreach ($architecture in $architectures) {
+  foreach ($architecture in $architectureList) {
     if ($architecture.Name -eq "arm64") {
       Import-Arm64MsvcEnvironment
     }
@@ -242,7 +251,9 @@ try {
     }
   }
 
-  $bundlePath = Join-Path $OutputDirectory ("1999WallpaperArchive_{0}_x64_arm64.msixbundle" -f $packageVersion)
+  # 文件名按实际架构列表生成：all -> _x64_arm64，单架构 -> _x64 / _arm64
+  $architectureSuffix = (($architectureList | ForEach-Object { $_.Name }) -join "_")
+  $bundlePath = Join-Path $OutputDirectory ("1999WallpaperArchive_{0}_{1}.msixbundle" -f $packageVersion, $architectureSuffix)
   & $makeAppxPath bundle /d $packageDirectory /p $bundlePath /bv $packageVersion /o
   if ($LASTEXITCODE -ne 0) { throw "MSIXBundle creation failed." }
 

@@ -69,11 +69,16 @@ const findBuiltApk = () => {
 const target = parseTarget(process.argv.slice(2))
 
 console.log(`[buildAndroid] 构建目标: ${target}`)
-const build = spawnSync("pnpm", ["-F", "app_tauri", "tauri", "android", "build", "--config", "tauri.android.conf.json", "--target", target], {
-  cwd: rootDir,
-  stdio: "inherit",
-  shell: true,
-})
+// --apk：只出安装包。不加时 tauri 会同时构建 AAB，而本项目分发走自有更新接口，AAB 用不到
+const build = spawnSync(
+  "pnpm",
+  ["-F", "app_tauri", "tauri", "android", "build", "--config", "tauri.android.conf.json", "--target", target, "--apk"],
+  {
+    cwd: rootDir,
+    stdio: "inherit",
+    shell: true,
+  }
+)
 if (build.status !== 0) fail(`tauri android build 失败，退出码 ${build.status ?? "unknown"}`)
 
 const apkPath = findBuiltApk()
