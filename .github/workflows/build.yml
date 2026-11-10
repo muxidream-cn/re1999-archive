@@ -157,7 +157,6 @@ jobs:
           # gradle 产出的文件名含中文和全角冒号，统一改成 ASCII，避免 artifact / release / CDN 环节出问题
           cp packages/app_tauri/target/android/*.apk "out/re1999-archive_${APP_VERSION}_${{ matrix.abi }}.apk"
           cd out
-          md5sum "re1999-archive_${APP_VERSION}_${{ matrix.abi }}.apk" > "re1999-archive_${APP_VERSION}_${{ matrix.abi }}.apk.md5"
           ls -l
 
       - uses: actions/upload-artifact@v7
@@ -230,8 +229,6 @@ jobs:
           $exe = Get-ChildItem "target/release/bundle/nsis/*.exe" -ErrorAction Stop | Select-Object -First 1
           $name = "re1999-archive_${env:APP_VERSION}_x64-setup.exe"
           Copy-Item $exe.FullName "out/$name"
-          $hash = (Get-FileHash "out/$name" -Algorithm MD5).Hash.ToLower()
-          "$hash  $name" | Set-Content "out/$name.md5" -Encoding utf8
           # updater 签名：有私钥时 tauri 会生成 <安装包>.exe.sig，应用内更新校验的就是它，必须一起归档
           $sig = Get-ChildItem "target/release/bundle/nsis/*.sig" -ErrorAction SilentlyContinue | Select-Object -First 1
           if ($sig) {
@@ -329,9 +326,11 @@ jobs:
           ls -l dist
           # download-artifact 会自动解压，dist 里应只有散装安装包；出现压缩包说明配置被改坏
           if compgen -G "dist/*.zip" > /dev/null; then
-            echo "::error::dist 中存在 zip，Release 只应挂载 exe / apk / md5 / sig"
+            echo "::error::dist 中存在 zip，Release 只应挂载 exe / apk / msixbundle"
             exit 1
           fi
+          # .sig 是应用内更新用的签名，留在 Artifact 里供手动登记，不进公开 Release
+          rm -f dist/*.md5 dist/*.sig
           echo "Release 将直接挂载以下散装文件：" && ls -1 dist
 
       - name: 生成发布说明
@@ -351,25 +350,22 @@ jobs:
           | 平台 | 文件 | 适用 |
           | --- | --- | --- |
           | Windows x64 | `re1999-archive_VER_x64-setup.exe` | 64 位 Windows 10/11 |
-          | Windows x64 | `re1999-archive_VER_x64-setup.exe.sig` | 安装包签名，供应用内更新校验 |
           | Android | `re1999-archive_VER_arm64-v8a.apk` | 绝大多数手机（arm64） |
           | Android | `re1999-archive_VER_x86_64.apk` | x86 模拟器、极少数设备 |
 
           ## 校验
 
-          每个包都附有同名 `.md5` 文件，下载后可自行比对：
+          每个文件的 SHA-256 由 GitHub 在发布时自动计算，可用命令查看：
 
           ```bash
-          md5sum -c re1999-archive_VER_x64-setup.exe.md5
-          # Windows
-          certutil -hashfile re1999-archive_VER_x64-setup.exe MD5
+          gh release view TAG --json assets --jq '.assets[] | [.name, .digest] | @tsv'
           ```
 
           安卓包已用正式证书签名，可直接覆盖安装旧版本；签名不一致时会报 `INSTALL_FAILED_UPDATE_INCOMPATIBLE`。
 
           ## 本次变更
           TPL
-          sed -i "s/VER/${ver}/g" notes.md
+          sed -i -e "s/VER/${ver}/g" -e "s/release view TAG/release view ${TAG}/" notes.md
 
           if [ -n "$prev" ]; then
             git log --no-merges --max-count=40 --pretty='- %s (%h)' "${prev}..${TAG}" >> notes.md
