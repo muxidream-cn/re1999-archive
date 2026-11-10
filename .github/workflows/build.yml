@@ -75,7 +75,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: 安装 pnpm
-        run: npm install -g pnpm@${{ env.PNPM_VERSION }}
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          # 缓存 pnpm store，避免每个 job 从零装依赖
+          cache: true
 
       - uses: actions/setup-java@v6
         with:
@@ -133,6 +137,17 @@ jobs:
             "$android_dir/release.jks" "$ANDROID_KEYSTORE_PASSWORD" "$ANDROID_KEY_ALIAS" "$ANDROID_KEY_PASSWORD" \
             > "$android_dir/keystore.properties"
 
+      # Gradle 每次都会重新下载发行包并重解析 AGP/Kotlin 依赖，缓存 ~/.gradle 能省下几分钟
+      - name: 缓存 Gradle
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('packages/app_tauri/gen/android/gradle/wrapper/gradle-wrapper.properties', 'packages/app_tauri/gen/android/**/*.gradle.kts') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
       - name: 构建 APK
         run: pnpm ${{ matrix.script }}
 
@@ -173,7 +188,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: 安装 pnpm
-        run: npm install -g pnpm@${{ env.PNPM_VERSION }}
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          # 缓存 pnpm store，避免每个 job 从零装依赖
+          cache: true
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -252,7 +271,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: 安装 pnpm
-        run: npm install -g pnpm@${{ env.PNPM_VERSION }}
+        uses: pnpm/action-setup@v6
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          # 缓存 pnpm store，避免每个 job 从零装依赖
+          cache: true
 
       - uses: dtolnay/rust-toolchain@stable
         with:
