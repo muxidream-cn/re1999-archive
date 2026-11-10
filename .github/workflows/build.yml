@@ -213,6 +213,14 @@ jobs:
           Copy-Item $exe.FullName "out/$name"
           $hash = (Get-FileHash "out/$name" -Algorithm MD5).Hash.ToLower()
           "$hash  $name" | Set-Content "out/$name.md5" -Encoding utf8
+          # updater 签名：有私钥时 tauri 会生成 <安装包>.exe.sig，应用内更新校验的就是它，必须一起归档
+          $sig = Get-ChildItem "target/release/bundle/nsis/*.sig" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($sig) {
+            Copy-Item $sig.FullName "out/$name.sig"
+            Write-Host "已归档 updater 签名: $($sig.Name)"
+          } else {
+            Write-Host "::warning::未生成 .sig，本次安装包无法用于应用内自动更新"
+          }
           Get-ChildItem out | Format-Table Name, Length
 
       - uses: actions/upload-artifact@v4
