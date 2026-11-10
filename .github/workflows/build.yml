@@ -324,7 +324,15 @@ jobs:
           merge-multiple: true
 
       - name: 校验产物
-        run: ls -l dist
+        run: |
+          set -euo pipefail
+          ls -l dist
+          # download-artifact 会自动解压，dist 里应只有散装安装包；出现压缩包说明配置被改坏
+          if compgen -G "dist/*.zip" > /dev/null; then
+            echo "::error::dist 中存在 zip，Release 只应挂载 exe / apk / md5 / sig"
+            exit 1
+          fi
+          echo "Release 将直接挂载以下散装文件：" && ls -1 dist
 
       - name: 生成发布说明
         env:
