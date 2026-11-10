@@ -66,18 +66,18 @@ jobs:
       VITE_OSS_1999_PREVIEW_URL: ${{ vars.VITE_OSS_1999_PREVIEW_URL }}
       VITE_STORE_VERSION: ${{ vars.VITE_STORE_VERSION }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: 安装 pnpm
         run: npm install -g pnpm@${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "21"
@@ -145,7 +145,7 @@ jobs:
           md5sum "re1999-archive_${APP_VERSION}_${{ matrix.abi }}.apk" > "re1999-archive_${APP_VERSION}_${{ matrix.abi }}.apk.md5"
           ls -l
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: android-${{ matrix.abi }}
           path: out/*
@@ -164,11 +164,11 @@ jobs:
       TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
       TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -223,7 +223,7 @@ jobs:
           }
           Get-ChildItem out | Format-Table Name, Length
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: windows-nsis
           path: out/*
@@ -243,11 +243,11 @@ jobs:
       VITE_OSS_1999_PREVIEW_URL: ${{ vars.VITE_OSS_1999_PREVIEW_URL }}
       VITE_STORE_VERSION: ${{ vars.VITE_STORE_VERSION }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -276,7 +276,7 @@ jobs:
         run: |
           powershell.exe -NoProfile -ExecutionPolicy Bypass -File packages/app_tauri/scripts/build-microsoft-store.ps1 -Architectures x64
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: windows-msix
           path: packages/app_tauri/target/microsoft-store/*.msixbundle
@@ -288,7 +288,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true
