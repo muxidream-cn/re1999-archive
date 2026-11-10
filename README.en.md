@@ -1,6 +1,6 @@
 # re1999-archive
 
-Game wallpaper archive monorepo
+Reverse: 1999 wallpaper archive monorepo
 
 <a href="./README.md"><kbd>简体中文</kbd></a> | <kbd>English</kbd>
 
@@ -51,7 +51,7 @@ git submodule update --init packages/re1999-docs
 | `README.md`                                    | Chinese documentation                                   |
 | `README.en.md`                                 | English documentation (this file)                       |
 
-## Project Docs
+## Project Docs (Notes and Explanations)
 
 ### Main Project (`docs/`)
 
@@ -103,28 +103,28 @@ git submodule update --init packages/re1999-docs
 
 ## Scripts
 
-| Script                          | Description                                                                                                |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `build:app`                     | Build the Android app                                                                                      |
-| `build:desktop`                 | Build the Windows desktop app                                                                              |
-| `build:desktop:microsoft-store` | Build the Microsoft Store package                                                                          |
-| `build:web`                     | Build the web app                                                                                          |
-| `check`                         | Run ESLint across the whole repository                                                                     |
-| `check:prettier`                | Check Prettier formatting                                                                                  |
-| `commit`                        | Run staged-file checks and start the guided commit                                                         |
-| `dev:app`                       | Start the Android dev environment                                                                          |
-| `dev:desktop`                   | Start the desktop dev environment                                                                          |
-| `dev:docs`                      | Start the docs site dev server (requires the `packages/re1999-docs` submodule)                             |
-| `dev:server`                    | Start the server dev environment (requires the private `packages/app_server` submodule)                    |
-| `dev:web`                       | Start the web dev server                                                                                   |
-| `lint`                          | Run ESLint with auto-fix                                                                                   |
-| `lint:commitlint`               | Validate the commit message                                                                                |
-| `lint:prettier`                 | Format with Prettier                                                                                       |
-| `lint-staged`                   | Run checks and fixes on staged files                                                                       |
-| `prepare`                       | Set up Husky Git hooks                                                                                     |
-| `preview:web`                   | Preview the web build output                                                                               |
-| `prod:server`                   | Start the server in production mode (requires the private `packages/app_server` submodule)                 |
-| `updateVersion`                 | Bump versions of all sub-projects (`--major` / `--minor` / `--patch` to pick the part, `patch` by default) |
+| Script                          | Description                                                                                |
+| ------------------------------- | ------------------------------------------------------------------------------------------ |
+| `build:app`                     | Build the Android app                                                                      |
+| `build:desktop`                 | Build the Windows desktop app                                                              |
+| `build:desktop:microsoft-store` | Build the Microsoft Store package                                                          |
+| `build:web`                     | Build the web app                                                                          |
+| `check`                         | Run ESLint across the whole repository                                                     |
+| `check:prettier`                | Check Prettier formatting                                                                  |
+| `commit`                        | Run staged-file checks and start the guided commit                                         |
+| `dev:app`                       | Start the Android dev environment                                                          |
+| `dev:desktop`                   | Start the desktop dev environment                                                          |
+| `dev:docs`                      | Start the docs site dev server (requires the `packages/re1999-docs` submodule)             |
+| `dev:server`                    | Start the server dev environment (requires the private `packages/app_server` submodule)    |
+| `dev:web`                       | Start the web dev server                                                                   |
+| `lint`                          | Run ESLint with auto-fix                                                                   |
+| `lint:commitlint`               | Validate the commit message                                                                |
+| `lint:prettier`                 | Format with Prettier                                                                       |
+| `lint-staged`                   | Run checks and fixes on staged files                                                       |
+| `prepare`                       | Set up Husky Git hooks                                                                     |
+| `preview:web`                   | Preview the web build output                                                               |
+| `prod:server`                   | Start the server in production mode (requires the private `packages/app_server` submodule) |
+| `updateVersion`                 | Interactive wizard for release targets, or pass `--platform` / `-v` flags                  |
 
 ## Git Commit Convention
 
@@ -182,9 +182,6 @@ The detailed commit message rules can be found in `commitlint.config.cjs`; the g
 
 Original code in this repository is licensed under **MIT**; see [LICENSE](./LICENSE) for details.
 `packages/app_server` is not covered by this license and will be handled separately as an independent project; the `packages/re1999-docs` documentation site is licensed under CC-BY-4.0. Third-party dependencies, fonts, images, game assets and trademarks are not relicensed by this license and remain subject to their own licenses or the rights holders' terms.
-
-The components under `packages/app_core/src/components/template` are usage references that reference third-party libraries such as lightGallery (GPLv3), v-viewer and anime.js.
-**Do not import them into builds**: they are kept as code samples only, are not installed as dependencies, and do not participate in bundling or distribution; their licensing belongs to the respective third-party libraries and is outside the scope of this project's MIT license.
 
 ### GSAP License Notice
 

@@ -25,9 +25,15 @@ if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
 $OutputDirectory = [System.IO.Path]::GetFullPath($OutputDirectory)
 
 $tauriConfig = [System.IO.File]::ReadAllText($baseConfigPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
+$windowsConfig = [System.IO.File]::ReadAllText($windowsConfigPath, [System.Text.Encoding]::UTF8) | ConvertFrom-Json
 $applicationDisplayName = [string]$tauriConfig.productName
 $applicationDescription = $applicationDisplayName
-$semver = [string]$tauriConfig.version
+# tauri build 按 base -> windows -> store 顺序合并配置；store 不含 version，故 windows 优先、base 兜底
+$semver = if ($windowsConfig.PSObject.Properties.Name -contains "version" -and $windowsConfig.version) {
+  [string]$windowsConfig.version
+} else {
+  [string]$tauriConfig.version
+}
 if ($semver -notmatch '^(\d+)\.(\d+)\.(\d+)(?:[-+].*)?$') {
   throw "Tauri version '$semver' cannot be converted to an MSIX version. Expected major.minor.patch."
 }

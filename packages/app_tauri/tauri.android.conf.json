@@ -1,4 +1,5 @@
 {
+  "version": "0.2.1",
   "build": {
     "frontendDist": "../app_android/dist",
     "beforeDevCommand": "pnpm -F app_android dev",

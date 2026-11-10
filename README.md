@@ -1,6 +1,6 @@
 # re1999-archive
 
-游戏壁纸归档站 Monorepo 项目说明
+《重返未来：1999》游戏壁纸归档站 Monorepo 项目说明
 
 <kbd>简体中文</kbd> | <a href="./README.en.md"><kbd>English</kbd></a>
 
@@ -49,9 +49,9 @@ git submodule update --init packages/re1999-docs
 | `.prettierrc.cjs`                              | Prettier 配置                              |
 | `commitlint.config.cjs`                        | commitlint 和 cz-git 配置                  |
 | `README.md`                                    | 本说明文档                                 |
-| `README.en.md`                                 | 英文说明文档（占位模板，待完善）           |
+| `README.en.md`                                 | 英文说明文档           |
 
-## 项目文档
+## 项目文档（备忘和说明）
 
 ### 主项目（`docs/`）
 
@@ -103,28 +103,28 @@ git submodule update --init packages/re1999-docs
 
 ## 脚本说明
 
-| 脚本                            | 说明                                                                             |
-| ------------------------------- | -------------------------------------------------------------------------------- |
-| `build:app`                     | 构建 Android 应用                                                                |
-| `build:desktop`                 | 构建 Windows 桌面应用                                                            |
-| `build:desktop:microsoft-store` | 构建 Microsoft Store 安装包                                                      |
-| `build:web`                     | 构建 Web 应用                                                                    |
-| `check`                         | 执行全仓 ESLint 检查                                                             |
-| `check:prettier`                | 检查 Prettier 格式                                                               |
-| `commit`                        | 暂存区检查并进入引导式提交                                                       |
-| `dev:app`                       | 启动 Android 开发环境                                                            |
-| `dev:desktop`                   | 启动桌面端开发环境                                                               |
-| `dev:docs`                      | 启动文档站开发服务器（需初始化 `packages/re1999-docs` 子模块）                   |
-| `dev:server`                    | 启动服务端开发环境（需初始化私有子模块 `packages/app_server`）                   |
-| `dev:web`                       | 启动 Web 开发服务器                                                              |
-| `lint`                          | ESLint 检查并自动修复                                                            |
-| `lint:commitlint`               | 校验 commit 信息                                                                 |
-| `lint:prettier`                 | Prettier 自动格式化                                                              |
-| `lint-staged`                   | 检查并修复暂存区文件                                                             |
-| `prepare`                       | 初始化 Husky Git Hooks                                                           |
-| `preview:web`                   | 预览 Web 构建产物                                                                |
-| `prod:server`                   | 启动服务端生产环境（需初始化私有子模块 `packages/app_server`）                   |
-| `updateVersion`                 | 更新各子项目版本号（`--major` / `--minor` / `--patch` 选择递增位，默认 `patch`） |
+| 脚本                            | 说明                                                            |
+| ------------------------------- | --------------------------------------------------------------- |
+| `build:app`                     | 构建 Android 应用                                               |
+| `build:desktop`                 | 构建 Windows 桌面应用                                           |
+| `build:desktop:microsoft-store` | 构建 Microsoft Store 安装包                                     |
+| `build:web`                     | 构建 Web 应用                                                   |
+| `check`                         | 执行全仓 ESLint 检查                                            |
+| `check:prettier`                | 检查 Prettier 格式                                              |
+| `commit`                        | 暂存区检查并进入引导式提交                                      |
+| `dev:app`                       | 启动 Android 开发环境                                           |
+| `dev:desktop`                   | 启动桌面端开发环境                                              |
+| `dev:docs`                      | 启动文档站开发服务器（需初始化 `packages/re1999-docs` 子模块）  |
+| `dev:server`                    | 启动服务端开发环境（需初始化私有子模块 `packages/app_server`）  |
+| `dev:web`                       | 启动 Web 开发服务器                                             |
+| `lint`                          | ESLint 检查并自动修复                                           |
+| `lint:commitlint`               | 校验 commit 信息                                                |
+| `lint:prettier`                 | Prettier 自动格式化                                             |
+| `lint-staged`                   | 检查并修复暂存区文件                                            |
+| `prepare`                       | 初始化 Husky Git Hooks                                          |
+| `preview:web`                   | 预览 Web 构建产物                                               |
+| `prod:server`                   | 启动服务端生产环境（需初始化私有子模块 `packages/app_server`）  |
+| `updateVersion`                 | 交互式向导选择发布端与版本动作，或传 `--platform` / `-v` 等参数 |
 
 ## Git 提交规范
 
@@ -182,9 +182,6 @@ commit 信息输入完成之后会触发格式检查，检查无误才会将代�
 
 本仓库中原创代码采用 **MIT**，详见 [LICENSE](./LICENSE)。
 `packages/app_server`不在本次授权范围内，将作为独立项目另行处理；`packages/re1999-docs` 文档站按 CC-BY-4.0 授权。第三方依赖、字体、图片、游戏素材及商标不由本许可证重新授权，应遵守各自的许可证或权利人授权。
-
-`packages/app_core/src/components/template` 下的组件是用法参考，其中引用了 lightGallery（GPLv3）、v-viewer、anime.js 等第三方库，
-**不要直接引入构建**：它们仅作代码示例保留，未作为依赖安装，不参与打包与分发，其授权归各自的第三方库，不在本项目 MIT 覆盖范围内。
 
 ### GSAP 许可声明
 
